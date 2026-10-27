@@ -1,0 +1,9 @@
+build/
+.cache/
+.tools/
+CMakeUserPresets.json
+.env
+*.sqlite3*
+*.db*
+*.user
+.DS_Store

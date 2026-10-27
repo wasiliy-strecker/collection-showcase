@@ -1,0 +1,56 @@
+#pragma once
+
+#include "ui/item_editor.h"
+
+#include <QMainWindow>
+#include <QPointer>
+
+class QLabel;
+class QLineEdit;
+class QPlainTextEdit;
+class QPushButton;
+class QTableWidget;
+
+namespace vitrine {
+
+class MainWindow final : public QMainWindow {
+  Q_OBJECT
+public:
+  MainWindow(StorageController& controller, QString dataDirectory, QWidget* parent = nullptr);
+
+protected:
+  void closeEvent(QCloseEvent* event) override;
+  bool eventFilter(QObject* watched, QEvent* event) override;
+
+private:
+  void refresh(std::optional<qint64> preferredId = std::nullopt, int fallbackRow = 0);
+  void updateSelection();
+  void updateActions();
+  std::optional<Collectible> selectedItem() const;
+  void openEditor(bool editing);
+  void showEditor(std::optional<Collectible> item, const QImage& preview = {});
+  void deleteSelected();
+  void showAbout();
+  StorageController& controller_;
+  QString dataDirectory_;
+  ItemList items_;
+  ItemList visibleItems_;
+  QPointer<ItemEditor> editor_;
+  QLineEdit* search_;
+  QTableWidget* table_;
+  QPlainTextEdit* note_;
+  QLabel* detailTitle_;
+  QLabel* state_;
+  QLabel* feedback_;
+  QLabel* count_;
+  QPushButton* add_;
+  QPushButton* edit_;
+  QPushButton* remove_;
+  QPushButton* reload_;
+  PhotoView* photoView_;
+  quint64 readToken_ = 0;
+  bool editLoading_ = false;
+  bool ready_ = false;
+};
+
+} // namespace vitrine

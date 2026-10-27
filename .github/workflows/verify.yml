@@ -1,0 +1,81 @@
+name: Build und Tests
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            host: linux
+            arch: linux_gcc_64
+            qt_dir: gcc_64
+          - os: windows-2022
+            host: windows
+            arch: win64_msvc2022_64
+            qt_dir: msvc2022_64
+          - os: macos-14
+            host: mac
+            arch: clang_64
+            qt_dir: macos
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: ilammy/msvc-dev-cmd@v1
+        if: runner.os == 'Windows'
+      - name: Werkzeuge
+        run: python -m pip install cmake==4.4.4 ninja==1.11.1.4 aqtinstall==3.3.0 clang-format==23.1.3
+      - name: Qt installieren
+        shell: bash
+        run: |
+          aqt install-qt '${{ matrix.host }}' desktop 6.8.3 '${{ matrix.arch }}' -O "$RUNNER_TEMP/Qt"
+          echo "CMAKE_PREFIX_PATH=$RUNNER_TEMP/Qt/6.8.3/${{ matrix.qt_dir }}" >> "$GITHUB_ENV"
+          echo "SAMMLERVITRINE_QT_ROOT=$RUNNER_TEMP/Qt/6.8.3/${{ matrix.qt_dir }}" >> "$GITHUB_ENV"
+          echo "$RUNNER_TEMP/Qt/6.8.3/${{ matrix.qt_dir }}/bin" >> "$GITHUB_PATH"
+      - name: Format prüfen
+        shell: bash
+        run: find src tests -type f \( -name '*.cpp' -o -name '*.h' \) -print0 | xargs -0 clang-format --dry-run --Werror
+      - name: Bauen und testen
+        run: |
+          cmake --preset release
+          cmake --build --preset release --parallel 4
+          ctest --preset release
+      - name: Windows-Testpaket
+        if: github.event_name == 'workflow_dispatch' && runner.os == 'Windows'
+        shell: pwsh
+        run: ./scripts/package_windows.ps1
+      - name: macOS-Testpaket
+        if: github.event_name == 'workflow_dispatch' && runner.os == 'macOS'
+        run: bash scripts/package_macos.sh
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'workflow_dispatch' && runner.os != 'Linux'
+        with:
+          name: sammlervitrine-${{ runner.os }}-testpaket
+          path: build/releases/*
+          if-no-files-found: error
+  sanitizers:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install cmake==4.4.4 ninja==1.11.1.4 aqtinstall==3.3.0
+      - run: aqt install-qt linux desktop 6.8.3 linux_gcc_64 -O "$RUNNER_TEMP/Qt"
+      - name: ASan und UBSan
+        env:
+          ASAN_OPTIONS: detect_leaks=1:halt_on_error=1
+          UBSAN_OPTIONS: halt_on_error=1
+        run: |
+          export CMAKE_PREFIX_PATH="$RUNNER_TEMP/Qt/6.8.3/gcc_64"
+          cmake --preset asan
+          cmake --build --preset asan --parallel 4
+          ctest --preset asan
