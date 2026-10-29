@@ -1,4 +1,5 @@
 #include "domain/item.h"
+#include <QCoreApplication>
 
 #include <QCollator>
 #include <QLocale>
@@ -11,7 +12,7 @@ ItemDraft validateDraft(ItemDraft draft) {
   draft.maker = draft.maker.trimmed();
   draft.location = draft.location.trimmed();
   if (draft.name.isEmpty()) {
-    throw ValidationError(QStringLiteral("Bitte gib eine Bezeichnung ein."));
+    throw ValidationError(QCoreApplication::translate("App", "Bitte gib eine Bezeichnung ein."));
   }
   return draft;
 }
@@ -32,7 +33,7 @@ ItemList searchItems(const ItemList& items, const QString& query) {
       matches.append(item);
     }
   }
-  QCollator collator{QLocale(QLocale::German, QLocale::Germany)};
+  QCollator collator{QLocale()};
   collator.setCaseSensitivity(Qt::CaseInsensitive);
   collator.setNumericMode(true);
   std::sort(matches.begin(), matches.end(),

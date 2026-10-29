@@ -10,7 +10,7 @@
 
 namespace vitrine {
 
-enum class Operation : quint8 { Load, Save, Remove };
+enum class Operation : quint8 { Load, Save, Remove, Language };
 struct ItemRequest {
   qint64 id;
   quint64 token;
@@ -26,6 +26,7 @@ public slots:
   void load();
   void save(qint64 id, const vitrine::ItemDraft& draft);
   void remove(qint64 id);
+  void saveLanguage(const QString& directory, const QString& preference);
   void readItem(const vitrine::ItemRequest& request);
   void importFile(const QString& path, quint64 token);
 
@@ -37,6 +38,7 @@ signals:
   void importFailed(quint64 token, const QString& message);
   void saved(const vitrine::Collectible& item);
   void removed(qint64 id);
+  void languageSaved(const QString& preference);
   void failed(vitrine::Operation operation, const QString& message);
 
 private:
@@ -53,6 +55,7 @@ public:
   bool load();
   bool save(qint64 id, const ItemDraft& draft);
   bool remove(qint64 id);
+  bool saveLanguage(const QString& directory, const QString& preference);
   void readItem(const vitrine::ItemRequest& request);
   bool importFile(const QString& path, quint64 token);
 
@@ -64,6 +67,7 @@ signals:
   void importFailed(quint64 token, const QString& message);
   void saved(const vitrine::Collectible& item);
   void removed(qint64 id);
+  void languageSaved(const QString& preference);
   void failed(vitrine::Operation operation, const QString& message);
   void busyChanged(bool busy);
   void loadRequested();
@@ -71,6 +75,7 @@ signals:
   void importRequested(const QString& path, quint64 token);
   void saveRequested(qint64 id, const vitrine::ItemDraft& draft);
   void removeRequested(qint64 id);
+  void languageRequested(const QString& directory, const QString& preference);
 
 private:
   bool begin();

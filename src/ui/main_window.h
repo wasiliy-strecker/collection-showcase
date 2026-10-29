@@ -16,7 +16,8 @@ namespace vitrine {
 class MainWindow final : public QMainWindow {
   Q_OBJECT
 public:
-  MainWindow(StorageController& controller, QString dataDirectory, QWidget* parent = nullptr);
+  MainWindow(StorageController& controller, QString dataDirectory,
+             QString languagePreference = QStringLiteral("auto"), QWidget* parent = nullptr);
 
 protected:
   void closeEvent(QCloseEvent* event) override;
@@ -31,8 +32,10 @@ private:
   void showEditor(std::optional<Collectible> item, const QImage& preview = {});
   void deleteSelected();
   void showAbout();
+  void showLanguage();
   StorageController& controller_;
   QString dataDirectory_;
+  QString languagePreference_;
   ItemList items_;
   ItemList visibleItems_;
   QPointer<ItemEditor> editor_;
@@ -47,6 +50,7 @@ private:
   QPushButton* edit_;
   QPushButton* remove_;
   QPushButton* reload_;
+  QPushButton* language_;
   PhotoView* photoView_;
   quint64 readToken_ = 0;
   bool editLoading_ = false;

@@ -40,7 +40,7 @@ Einzeilige Texte werden außen mit Unicode-Leerraumerkennung bereinigt. Die
 Bezeichnung darf danach nicht leer sein. Die Notiz bleibt einschließlich
 Leerzeilen und Einrückung erhalten. Qt-Texteditoren verwenden die übliche
 LF-Darstellung. Die Suche normalisiert nach NFC, wendet Unicode-Case-Folding
-an und normalisiert erneut. Ein deutscher QCollator mit natürlicher
+an und normalisiert erneut. Ein QCollator der aktiven App-Sprache mit natürlicher
 Zahlensortierung und der ID als Gleichstandsregel liefert stabile Reihenfolge.
 Die lineare Textsuche passt zum bewusst kleinen Sammlungsumfang.
 
@@ -134,6 +134,22 @@ QStandardPaths bestimmt den Benutzerpfad. Ein QLockFile im kanonischen
 Datenverzeichnis verhindert eine zweite schreibende App-Instanz. Pfadfehler,
 fehlende Rechte, belegter Datenträger, SQL-Sperren und Lesefehler erhalten eigene
 Hinweise. Es gibt keinen stillen Ersatz durch eine leere Sammlung.
+
+## Sprache und Einstellungen
+
+Das interne Target `item_i18n` enthält sechs App-Kataloge und die passenden
+Qt-Basisübersetzungen als Ressourcen. `Translations` installiert sie vor dem
+Start der Fenster und des Workers. Der aktive Katalog bleibt während des
+Prozesses unverändert. `QLocale` steuert Sortierung und Zahlenformat.
+Nicht unterstützte Sprachen fallen auf Englisch zurück.
+
+`language.txt` liegt neben der Datenbank. Gelesen werden höchstens 128 Bytes.
+Fehlende Einstellungen bedeuten automatische Sprachauswahl, fehlerhafte
+Einstellungen führen zu Englisch und einem Hinweis. Der vorhandene Worker
+speichert Änderungen über `QSaveFile` atomar. Ein Schreibfehler erhält die alte
+Einstellung und die Auswahl im Dialog. Die Änderung gilt beim nächsten Start.
+Eine Änderung der SQLite-Datei, ihres Schemas oder der Foto-BLOBs ist dafür
+nicht erforderlich.
 
 ## Nachweise
 

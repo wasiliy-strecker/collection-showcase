@@ -1,0 +1,42 @@
+{
+  "search": "mercadillo",
+  "items": [
+    [
+      "Robot de hojalata",
+      "Atelier Nord",
+      "Vitrina A · estante 2",
+      "Encontrado en un mercadillo.\nCaja original en el estante superior."
+    ],
+    [
+      "Coche en miniatura",
+      "Studio Mira",
+      "Vitrina A · estante 1",
+      "Un pequeño recuerdo del primer viaje."
+    ],
+    [
+      "Ave de porcelana",
+      "Atelier Nord",
+      "Estante junto a la ventana",
+      "Regalo de inauguración de la casa."
+    ],
+    [
+      "Postal antigua",
+      "Studio Mira",
+      "Carpeta de viajes",
+      "Texto escrito a mano en el reverso."
+    ],
+    [
+      "Recipiente decorativo",
+      "Werkstatt Lin",
+      "Armario B",
+      "La tapa y la base forman un conjunto."
+    ]
+  ],
+  "photos": [
+    "images/robot.png",
+    "images/car.jpg",
+    "images/bird.png",
+    null,
+    null
+  ]
+}

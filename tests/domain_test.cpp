@@ -2,6 +2,8 @@
 #include "domain/item.h"
 #include "persistence/data_directory.h"
 
+#include <QLocale>
+#include <QScopeGuard>
 #include <QStandardPaths>
 #include <QTemporaryDir>
 #include <QtTest>
@@ -66,6 +68,9 @@ private slots:
     QCOMPARE(searchItems(items, QStringLiteral("ömer")).size(), 1);
   }
   void emptyMissingAndStableOrder() {
+    const auto previous = QLocale();
+    const auto restore = qScopeGuard([previous] { QLocale::setDefault(previous); });
+    QLocale::setDefault(QLocale(QStringLiteral("de-DE")));
     const ItemList items{{9, {QStringLiteral("Sammlerstück 10"), {}, {}, {}}},
                          {8, {QStringLiteral("Azul"), {}, {}, {}}},
                          {4, {QStringLiteral("azul"), {}, {}, {}}},

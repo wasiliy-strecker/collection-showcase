@@ -10,14 +10,20 @@ Lizenzkonformität jedes späteren Store-Auslieferungswegs bleibt gesondert zu p
 
 Die Pakete verwenden Qt 6.8.3 aus derselben ABI-kompatiblen SDK-Installation
 wie der Build. Sie enthalten Core, Gui, Widgets, Sql, Plattform-Plugin,
-QSQLITE, JPEG-Plugin, die in Qt Gui integrierte PNG-Unterstützung sowie deutsche
-Qt-Übersetzungen `qtbase_de.qm`. Systemdialoge folgen zusätzlich der Betriebssystem-
-sprache. Lizenztexte, Komponentenhinweise und SDK-SPDX-Metadaten werden beigelegt.
+QSQLITE, JPEG-Plugin und die in Qt Gui integrierte PNG-Unterstützung. Sechs
+App-Kataloge und die Qt-Basisübersetzungen für Deutsch, Spanisch, Französisch,
+Italienisch und brasilianisches Portugiesisch sind im Binary eingebettet.
+Englisch verwendet die Qt-Originaltexte. Native Systemdialoge folgen zusätzlich
+der Betriebssystemsprache. Lizenztexte, Komponentenhinweise und
+SDK-SPDX-Metadaten werden beigelegt.
 Qt Test wird nicht ausgeliefert. Ein Nutzer benötigt weder Entwicklerwerkzeuge
 noch ein separates Qt oder eine andere Portfolio-App.
 
 Vor Paketierung müssen Compilerwarnungen, Formatter und Tests bestehen.
-Lieferverzeichnisse und Archive enthalten App, Version, System und Architektur.
+Internationale Vorschauen werden auf Nutzerwunsch ausschließlich als Ordner
+ohne ZIP oder anderes Lieferarchiv erstellt. Die vorhandenen Helfer für
+spätere native Pakete bleiben separate Releasewege. Lieferverzeichnisse
+enthalten App, Version, System und Architektur.
 Die Skripte ersetzen keine vorhandene Lieferung. Eine ungeteilte Zwischenstufe
 kann für einen erneuten Prüflauf separat archiviert werden. Bereits übergebene
 Artefakte bleiben erhalten. SHA-256-Dateien dienen der Integritätskontrolle.
@@ -30,6 +36,7 @@ cmake --preset release
 cmake --build --preset release --parallel 4
 ctest --preset release
 python3 scripts/package_linux.py --qt "$SAMMLERVITRINE_QT_ROOT" \
+  --stage-only --output-dir build/staging/international \
   --cursor-library /pfad/libxcb-cursor.so.0 \
   --cursor-license /pfad/copyright
 ```
@@ -41,7 +48,7 @@ PNG ist im tatsächlich verwendeten Qt Gui vorhanden. Der Paketlauncher setzt
 seine eigenen Bibliotheks-/Pluginpfade und das GTK3-Thema.
 
 ```bash
-./build/releases/sammlervitrine-0.1.0-linux-x64/SammlerVitrine.sh --data-dir /tmp/sammlervitrine-pakettest
+./build/staging/international/sammlervitrine-0.1.0-linux-x64/SammlerVitrine.sh --data-dir /tmp/sammlervitrine-pakettest
 ```
 
 Das ist ein Ubuntu-24.04-x64-Prüfpaket. Übliche Systembibliotheken wie glibc,
@@ -50,10 +57,13 @@ Linux-Format und kein zusätzlich geplantes Linux-Store-Produkt.
 Das Skript prüft mit ldd, dass seine Bibliotheken auflösbar sind und nicht
 unbeabsichtigt auf das Entwicklungs-SDK zeigen.
 
-Das entpackte Paket außerhalb des Projekts mit bereinigter Umgebung starten.
+Das bereitgestellte Paket außerhalb des Projekts mit bereinigter Umgebung starten.
 Native Dateiauswahl, JPEG und PNG, Fotoanzeige, CRUD, Speicherfehler und
 Prozessneustart prüfen. Danach die Bildquellen löschen und erneut starten.
 `--version` allein ist keine Abnahme. Siehe [Prüfbericht](verification.md).
+
+Die app-lokale Aufnahme und Zusammenstellung von sechs Store-Textpaketen und
+24 echten Vorschau-Bildern beschreibt [Internationalisierung](internationalization.md).
 
 ## Windows x64 und Microsoft Store
 
@@ -147,7 +157,8 @@ ausgeführt. Beide Mac-Architekturen bleiben gesonderte native Prüfziele.
 
 ## Offizielle Quellen
 
-Erneut für diesen Auftrag geprüft. Vor einem Release erneut bewerten:
+Grundlagen der ursprünglichen Umsetzung vom 27. Oktober 2026. Vor einem
+nativen Release erneut bewerten:
 
 [Qt 6.8 Windows-Deployment](https://doc.qt.io/qt-6.8/windows-deployment.html),
 [Qt 6.8 macOS-Deployment](https://doc.qt.io/qt-6.8/macos-deployment.html),

@@ -1,0 +1,42 @@
+{
+  "search": "flea market",
+  "items": [
+    [
+      "Tin robot",
+      "Atelier Nord",
+      "Showcase A · shelf 2",
+      "Found at a flea market.\nOriginal box on the top shelf."
+    ],
+    [
+      "Miniature car",
+      "Studio Mira",
+      "Showcase A · shelf 1",
+      "A small reminder of the first trip."
+    ],
+    [
+      "Porcelain bird",
+      "Atelier Nord",
+      "Shelf by the window",
+      "A housewarming gift."
+    ],
+    [
+      "Vintage postcard",
+      "Studio Mira",
+      "Travel folder",
+      "Handwriting on the back."
+    ],
+    [
+      "Wooden keepsake box",
+      "Werkstatt Lin",
+      "Cabinet B",
+      "Lid and base belong together."
+    ]
+  ],
+  "photos": [
+    "images/robot.png",
+    "images/car.jpg",
+    "images/bird.png",
+    null,
+    null
+  ]
+}

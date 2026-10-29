@@ -1,5 +1,6 @@
 #include "persistence/sqlite_item_repository.h"
 #include "application/photo_importer.h"
+#include <QCoreApplication>
 
 #include <QDir>
 #include <QFileInfo>
@@ -16,26 +17,29 @@ namespace {
   // SQLite extended result codes keep the primary result in the low byte.
   const int code = error.nativeErrorCode().toInt() & 0xff;
   if (code == 5 || code == 6) {
-    throw StorageError(QStringLiteral("Die Datenbank ist gerade gesperrt. Beende andere Zugriffe "
-                                      "und versuche es erneut. Deine Eingaben bleiben erhalten."));
+    throw StorageError(QCoreApplication::translate(
+        "App", "Die Datenbank ist gerade gesperrt. Beende andere Zugriffe "
+               "und versuche es erneut. Deine Eingaben bleiben erhalten."));
   }
   if (code == 11 || code == 26) {
-    throw StorageError(
-        QStringLiteral("Die Datenbank ist beschädigt oder keine gültige SQLite-Datei. "
-                       "Sie wird nicht ersetzt. Sichere die Datei vor einer Reparatur."));
+    throw StorageError(QCoreApplication::translate(
+        "App", "Die Datenbank ist beschädigt oder keine gültige SQLite-Datei. "
+               "Sie wird nicht ersetzt. Sichere die Datei vor einer Reparatur."));
   }
   if (code == 3 || code == 8 || code == 14) {
-    throw StorageError(QStringLiteral("Die Datenbank kann nicht geöffnet oder beschrieben werden. "
-                                      "Prüfe das Datenverzeichnis und deine Zugriffsrechte."));
+    throw StorageError(QCoreApplication::translate(
+        "App", "Die Datenbank kann nicht geöffnet oder beschrieben werden. "
+               "Prüfe das Datenverzeichnis und deine Zugriffsrechte."));
   }
   if (code == 13) {
-    throw StorageError(QStringLiteral("Es ist nicht genügend Speicherplatz verfügbar. "
-                                      "Schaffe Platz und versuche es erneut."));
+    throw StorageError(QCoreApplication::translate("App",
+                                                   "Es ist nicht genügend Speicherplatz verfügbar. "
+                                                   "Schaffe Platz und versuche es erneut."));
   }
-  throw StorageError(
-      QStringLiteral("Der Datenbankzugriff ist fehlgeschlagen. "
-                     "Prüfe Datenträger und Zugriffsrechte und versuche es erneut.\n%1")
-          .arg(error.text()));
+  throw StorageError(QCoreApplication::translate(
+                         "App", "Der Datenbankzugriff ist fehlgeschlagen. "
+                                "Prüfe Datenträger und Zugriffsrechte und versuche es erneut.\n%1")
+                         .arg(error.text()));
 }
 
 void execute(QSqlQuery& query, const QString& sql) {
@@ -97,9 +101,9 @@ void bindDraft(QSqlQuery& query, const ItemDraft& draft) {
 
 void requireAffectedRow(const QSqlQuery& query) {
   if (query.numRowsAffected() != 1) {
-    throw StorageError(
-        QStringLiteral("Dieses Sammlerstück ist nicht mehr vorhanden. "
-                       "Lade die Sammlung erneut. Deine Eingaben bleiben erhalten."));
+    throw StorageError(QCoreApplication::translate(
+        "App", "Dieses Sammlerstück ist nicht mehr vorhanden. "
+               "Lade die Sammlung erneut. Deine Eingaben bleiben erhalten."));
   }
 }
 
@@ -125,8 +129,9 @@ void SqliteItemRepository::initialize() {
   }
   close();
   if (!QDir::isAbsolutePath(directory_) || !QDir().mkpath(directory_)) {
-    throw StorageError(QStringLiteral("Das Datenverzeichnis kann nicht angelegt werden. "
-                                      "Prüfe Pfad, Datenträger und Zugriffsrechte."));
+    throw StorageError(
+        QCoreApplication::translate("App", "Das Datenverzeichnis kann nicht angelegt werden. "
+                                           "Prüfe Pfad, Datenträger und Zugriffsrechte."));
   }
   directory_ = QFileInfo(directory_).canonicalFilePath();
   lock_ = std::make_unique<QLockFile>(QDir(directory_).filePath(QStringLiteral("collection.lock")));
@@ -136,9 +141,11 @@ void SqliteItemRepository::initialize() {
     lock_.reset();
     throw StorageError(
         otherInstance
-            ? QStringLiteral("Diese Sammlung ist bereits in einer anderen App-Instanz geöffnet. "
-                             "Schließe sie dort und lade hier erneut.")
-            : QStringLiteral(
+            ? QCoreApplication::translate(
+                  "App", "Diese Sammlung ist bereits in einer anderen App-Instanz geöffnet. "
+                         "Schließe sie dort und lade hier erneut.")
+            : QCoreApplication::translate(
+                  "App",
                   "Das Datenverzeichnis ist nicht beschreibbar. Prüfe deine Zugriffsrechte."));
   }
   try {
@@ -154,14 +161,15 @@ void SqliteItemRepository::initialize() {
     QSqlQuery query(database_);
     execute(query, QStringLiteral("PRAGMA user_version"));
     if (!query.next()) {
-      throw StorageError(QStringLiteral("Die Schema-Version konnte nicht gelesen werden."));
+      throw StorageError(
+          QCoreApplication::translate("App", "Die Schema-Version konnte nicht gelesen werden."));
     }
     const int version = query.value(0).toInt();
     query.finish();
     if (version > 1) {
-      throw StorageError(
-          QStringLiteral("Diese Datenbank benötigt eine neuere Version von SammlerVitrine. "
-                         "Die vorhandene Datei wird nicht verändert."));
+      throw StorageError(QCoreApplication::translate(
+          "App", "Diese Datenbank benötigt eine neuere Version von SammlerVitrine. "
+                 "Die vorhandene Datei wird nicht verändert."));
     }
     if (isNew) {
       Transaction transaction(database_);
@@ -175,20 +183,21 @@ void SqliteItemRepository::initialize() {
       query.finish();
       transaction.commit();
     } else if (version != 1) {
-      throw StorageError(
-          QStringLiteral("Die vorhandene Datei hat kein bekanntes SammlerVitrine-Schema. "
-                         "Sie wird nicht überschrieben."));
+      throw StorageError(QCoreApplication::translate(
+          "App", "Die vorhandene Datei hat kein bekanntes SammlerVitrine-Schema. "
+                 "Sie wird nicht überschrieben."));
     }
     execute(query, QStringLiteral("PRAGMA application_id"));
     if (!query.next() || query.value(0).toInt() != 1398166612) {
-      throw StorageError(QStringLiteral(
-          "Diese Datenbank gehört nicht zu SammlerVitrine. Sie wird nicht verändert."));
+      throw StorageError(QCoreApplication::translate(
+          "App", "Diese Datenbank gehört nicht zu SammlerVitrine. Sie wird nicht verändert."));
     }
     query.finish();
     execute(query, QStringLiteral("PRAGMA quick_check"));
     if (!query.next() || query.value(0).toString() != QStringLiteral("ok")) {
-      throw StorageError(QStringLiteral("Die Datenbankprüfung hat einen Schaden gefunden. "
-                                        "Sichere die Datei. Sie wird nicht ersetzt."));
+      throw StorageError(
+          QCoreApplication::translate("App", "Die Datenbankprüfung hat einen Schaden gefunden. "
+                                             "Sichere die Datei. Sie wird nicht ersetzt."));
     }
     query.finish();
     execute(query, QStringLiteral("PRAGMA table_info(items)"));
@@ -208,8 +217,9 @@ void SqliteItemRepository::initialize() {
     if (!validTypes || columns != QStringList{QStringLiteral("id"), QStringLiteral("name"),
                                               QStringLiteral("maker"), QStringLiteral("location"),
                                               QStringLiteral("note"), QStringLiteral("photo")}) {
-      throw StorageError(QStringLiteral("Die Datenbankstruktur ist unbekannt oder beschädigt. "
-                                        "Die Datei wird nicht ersetzt."));
+      throw StorageError(
+          QCoreApplication::translate("App", "Die Datenbankstruktur ist unbekannt oder beschädigt. "
+                                             "Die Datei wird nicht ersetzt."));
     }
     initialized_ = true;
   } catch (...) {
@@ -248,15 +258,16 @@ Collectible SqliteItemRepository::find(qint64 id) {
     if (query.lastError().isValid()) {
       fail(query.lastError());
     }
-    throw StorageError(QStringLiteral(
-        "Dieses Sammlerstück ist nicht mehr vorhanden. Bitte lade die Sammlung erneut."));
+    throw StorageError(QCoreApplication::translate(
+        "App", "Dieses Sammlerstück ist nicht mehr vorhanden. Bitte lade die Sammlung erneut."));
   }
   const bool hasPhoto = query.value(6).toString() != QStringLiteral("null");
   if (hasPhoto &&
       (query.value(6).toString() != QStringLiteral("blob") || query.value(5).toLongLong() <= 0 ||
        query.value(5).toLongLong() > maxPhotoBytes)) {
-    throw StorageError(QStringLiteral("Das gespeicherte Foto ist ungültig oder zu groß. Der "
-                                      "Eintrag wird zum Schutz des Fotos nicht bearbeitet."));
+    throw StorageError(
+        QCoreApplication::translate("App", "Das gespeicherte Foto ist ungültig oder zu groß. Der "
+                                           "Eintrag wird zum Schutz des Fotos nicht bearbeitet."));
   }
   return {query.value(0).toLongLong(),
           {query.value(1).toString(), query.value(2).toString(), query.value(3).toString(),

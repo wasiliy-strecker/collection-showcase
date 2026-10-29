@@ -1,5 +1,7 @@
 #include "ui/storage_controller.h"
 #include "application/photo_importer.h"
+#include "persistence/language_preferences.h"
+#include <QCoreApplication>
 
 #include <utility>
 
@@ -22,7 +24,8 @@ void StorageWorker::load() {
 void StorageWorker::save(qint64 id, const ItemDraft& draft) {
   try {
     if (!repository_) {
-      throw StorageError(QStringLiteral("Die Sammlung ist noch nicht geladen."));
+      throw StorageError(
+          QCoreApplication::translate("App", "Die Sammlung ist noch nicht geladen."));
     }
     ItemService service(*repository_);
     emit saved(service.save(id, draft));
@@ -34,7 +37,8 @@ void StorageWorker::save(qint64 id, const ItemDraft& draft) {
 void StorageWorker::remove(qint64 id) {
   try {
     if (!repository_) {
-      throw StorageError(QStringLiteral("Die Sammlung ist noch nicht geladen."));
+      throw StorageError(
+          QCoreApplication::translate("App", "Die Sammlung ist noch nicht geladen."));
     }
     ItemService service(*repository_);
     service.remove(id);
@@ -47,7 +51,8 @@ void StorageWorker::remove(qint64 id) {
 void StorageWorker::readItem(const ItemRequest& request) {
   try {
     if (!repository_) {
-      throw StorageError(QStringLiteral("Die Sammlung ist noch nicht geladen."));
+      throw StorageError(
+          QCoreApplication::translate("App", "Die Sammlung ist noch nicht geladen."));
     }
     const auto item = repository_->find(request.id);
     const auto preview = item.hasPhoto ? decodePhoto(item.fields.photo).preview : QImage();
@@ -66,6 +71,15 @@ void StorageWorker::importFile(const QString& path, quint64 token) {
   }
 }
 
+void StorageWorker::saveLanguage(const QString& directory, const QString& preference) {
+  try {
+    saveLanguagePreference(directory, preference);
+    emit languageSaved(preference);
+  } catch (const std::exception& error) {
+    emit failed(Operation::Language, QString::fromUtf8(error.what()));
+  }
+}
+
 StorageController::StorageController(RepositoryFactory factory, QObject* parent) : QObject(parent) {
   qRegisterMetaType<ItemDraft>();
   qRegisterMetaType<Collectible>();
@@ -78,6 +92,11 @@ StorageController::StorageController(RepositoryFactory factory, QObject* parent)
   connect(this, &StorageController::loadRequested, worker, &StorageWorker::load);
   connect(this, &StorageController::saveRequested, worker, &StorageWorker::save);
   connect(this, &StorageController::removeRequested, worker, &StorageWorker::remove);
+  connect(this, &StorageController::languageRequested, worker, &StorageWorker::saveLanguage);
+  connect(worker, &StorageWorker::languageSaved, this, [this](const QString& preference) {
+    finish();
+    emit languageSaved(preference);
+  });
   connect(worker, &StorageWorker::loaded, this, [this](const ItemList& items) {
     finish();
     emit loaded(items);
@@ -165,4 +184,12 @@ bool StorageController::importFile(const QString& path, quint64 token) {
   emit importRequested(path, token);
   return true;
 }
+bool StorageController::saveLanguage(const QString& directory, const QString& preference) {
+  if (!begin()) {
+    return false;
+  }
+  emit languageRequested(directory, preference);
+  return true;
+}
+
 } // namespace vitrine

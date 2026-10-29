@@ -1,0 +1,4 @@
+Sfoglia la collezione con foto e note.
+Modifica i dettagli e aggiungi o sostituisci una foto.
+Trova gli oggetti attraverso le tue note.
+Scegli la lingua per il prossimo avvio.

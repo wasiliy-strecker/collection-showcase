@@ -66,6 +66,7 @@ def main():
 
     with tempfile.TemporaryDirectory(prefix="sammlervitrine-gui-") as temporary:
         directory = Path(temporary)
+        (directory / "language.txt").write_text("de-DE\n")
         database = directory / "sammlervitrine.sqlite3"
         log = (output / "app.log").open("w")
         process = None

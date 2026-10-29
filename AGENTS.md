@@ -10,7 +10,10 @@ Keine Statuswerte, Checklisten, Exporte, Konten oder Online-Funktionen ergänzen
 `src/domain` enthält Werte und Regeln, `src/application` Service, Repository-Vertrag
 und Fotoimport, `src/persistence` ausschließlich SQL, `src/ui` ausschließlich Widgets
 und deren Koordination. Kein gemeinsames Runtime-Paket. Englische C++-Bezeichner,
-deutsche Oberfläche und Dokumentation.
+deutsche Dokumentation und sechs Oberflächensprachen: de-DE, en-US, es-ES,
+fr-FR, it-IT und pt-BR. Neue Meldungen über den App-Katalog übersetzen.
+Kennungen, Schema und Foto-BLOBs sind sprachunabhängig. Sprachwechsel gelten
+ab Neustart. Repository-Namen und GitHub-Metadaten bleiben englisch.
 
 Alle SQL-Verbindungen gehören dem einzelnen Worker-Thread. Fotoeinlesen,
 Validierung und Decodierung laufen ebenfalls dort. QImage darf als Wert über
@@ -47,6 +50,8 @@ eigener Laufzeit einschließlich Fotoimport und Neustart ohne Bildquelle prüfen
 ## Abschluss
 
 Nach erfolgreichen Prüfungen Workspace-Changelog ergänzen und app-lokal committen.
+Internationale Vorschauen ausschließlich als Ordner liefern, ohne ZIP oder
+anderes Lieferarchiv. Siehe `docs/internationalization.md`.
 Kein Root-Repository erstellen. Kein Push und keine Veröffentlichung ohne Auftrag.
 Veröffentlichungsreihenfolge: zuerst Microsoft Store, später Mac App Store.
 Kostenfreie dynamische Qt-LGPL-Basis ist gewählt. Native Abnahmen, konkrete

@@ -1,5 +1,6 @@
 #include "ui/item_editor.h"
 #include "ui/ui_support.h"
+#include <QCoreApplication>
 
 #include <QCloseEvent>
 #include <QDialogButtonBox>
@@ -21,13 +22,15 @@ ItemEditor::ItemEditor(StorageController& controller, std::optional<Collectible>
                        QWidget* parent, const QImage& preview)
     : QDialog(parent), controller_(controller), name_(new QLineEdit(this)),
       maker_(new QLineEdit(this)), location_(new QLineEdit(this)), note_(new QPlainTextEdit(this)),
-      error_(new QLabel(this)), save_(new QPushButton(QStringLiteral("Speichern"), this)),
-      cancel_(new QPushButton(QStringLiteral("Abbrechen"), this)), photoView_(new PhotoView(this)),
-      choosePhoto_(new QPushButton(QStringLiteral("&Foto hinzufügen"), this)),
-      removePhoto_(new QPushButton(QStringLiteral("Foto &entfernen"), this)) {
+      error_(new QLabel(this)),
+      save_(new QPushButton(QCoreApplication::translate("App", "Speichern"), this)),
+      cancel_(new QPushButton(QCoreApplication::translate("App", "Abbrechen"), this)),
+      photoView_(new PhotoView(this)),
+      choosePhoto_(new QPushButton(QCoreApplication::translate("App", "&Foto hinzufügen"), this)),
+      removePhoto_(new QPushButton(QCoreApplication::translate("App", "Foto &entfernen"), this)) {
   setObjectName(QStringLiteral("itemEditor"));
-  setWindowTitle(existing ? QStringLiteral("Sammlerstück bearbeiten")
-                          : QStringLiteral("Sammlerstück hinzufügen"));
+  setWindowTitle(existing ? QCoreApplication::translate("App", "Sammlerstück bearbeiten")
+                          : QCoreApplication::translate("App", "Sammlerstück hinzufügen"));
   setWindowModality(Qt::WindowModal);
   resize(600, 780);
   setMinimumSize(320, 280);
@@ -42,15 +45,17 @@ ItemEditor::ItemEditor(StorageController& controller, std::optional<Collectible>
     field->setMaxLength(1000000);
     field->setClearButtonEnabled(true);
   }
-  name_->setPlaceholderText(QStringLiteral("Wie heißt das Sammlerstück?"));
-  maker_->setPlaceholderText(QStringLiteral("Optional"));
-  location_->setPlaceholderText(QStringLiteral("Zum Beispiel Wohnzimmer, Regal 2"));
-  note_->setPlaceholderText(QStringLiteral("Was möchtest du dir zu diesem Sammlerstück merken?"));
+  name_->setPlaceholderText(QCoreApplication::translate("App", "Wie heißt das Sammlerstück?"));
+  maker_->setPlaceholderText(QCoreApplication::translate("App", "Optional"));
+  location_->setPlaceholderText(
+      QCoreApplication::translate("App", "Zum Beispiel Wohnzimmer, Regal 2"));
+  note_->setPlaceholderText(
+      QCoreApplication::translate("App", "Was möchtest du dir zu diesem Sammlerstück merken?"));
   note_->setMinimumHeight(120);
   note_->setTabChangesFocus(true);
   error_->setTextFormat(Qt::PlainText);
   error_->setWordWrap(true);
-  error_->setAccessibleName(QStringLiteral("Hinweis zum Speichern"));
+  error_->setAccessibleName(QCoreApplication::translate("App", "Hinweis zum Speichern"));
   error_->hide();
   connect(name_, &QLineEdit::textChanged, this, [this] {
     if (validationError_ && !name_->text().trimmed().isEmpty()) {
@@ -74,7 +79,7 @@ ItemEditor::ItemEditor(StorageController& controller, std::optional<Collectible>
   removePhoto_->setEnabled(!photo_.isEmpty());
   if (!photo_.isEmpty()) {
     photoView_->showImage(preview);
-    choosePhoto_->setText(QStringLiteral("&Foto ersetzen"));
+    choosePhoto_->setText(QCoreApplication::translate("App", "&Foto ersetzen"));
   }
   choosePhoto_->setAutoDefault(false);
   removePhoto_->setAutoDefault(false);
@@ -84,8 +89,8 @@ ItemEditor::ItemEditor(StorageController& controller, std::optional<Collectible>
     }
     choosing_ = true;
     const auto path = QFileDialog::getOpenFileName(
-        this, QStringLiteral("Foto auswählen"), {},
-        QStringLiteral("Fotos (*.jpg *.jpeg *.png);;Alle Dateien (*)"));
+        this, QCoreApplication::translate("App", "Foto auswählen"), {},
+        QCoreApplication::translate("App", "Fotos (*.jpg *.jpeg *.png);;Alle Dateien (*)"));
     choosing_ = false;
     importPath(path);
   });
@@ -102,19 +107,20 @@ ItemEditor::ItemEditor(StorageController& controller, std::optional<Collectible>
   form->setRowWrapPolicy(QFormLayout::WrapAllRows);
   form->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
   form->setSpacing(10);
-  auto* hint = new QLabel(QStringLiteral("Nur die Bezeichnung ist erforderlich."), formWidget);
+  auto* hint = new QLabel(
+      QCoreApplication::translate("App", "Nur die Bezeichnung ist erforderlich."), formWidget);
   hint->setWordWrap(true);
   form->addRow(hint);
-  form->addRow(QStringLiteral("&Bezeichnung *"), name_);
-  form->addRow(QStringLiteral("&Marke oder Hersteller"), maker_);
-  form->addRow(QStringLiteral("&Aufbewahrungsort"), location_);
-  form->addRow(QStringLiteral("&Notiz"), note_);
+  form->addRow(QCoreApplication::translate("App", "&Bezeichnung *"), name_);
+  form->addRow(QCoreApplication::translate("App", "&Marke oder Hersteller"), maker_);
+  form->addRow(QCoreApplication::translate("App", "&Aufbewahrungsort"), location_);
+  form->addRow(QCoreApplication::translate("App", "&Notiz"), note_);
   form->addRow(photoView_);
   form->addRow(choosePhoto_);
   form->addRow(removePhoto_);
   auto* photoHint = new QLabel(
-      QStringLiteral(
-          "JPEG oder PNG · bis 10 MiB · 6000 Pixel je Seite · 16 Millionen Pixel insgesamt"),
+      QCoreApplication::translate(
+          "App", "JPEG oder PNG · bis 10 MiB · 6000 Pixel je Seite · 16 Millionen Pixel insgesamt"),
       this);
   photoHint->setWordWrap(true);
   form->addRow(photoHint);
@@ -180,15 +186,16 @@ void ItemEditor::setSaving(bool saving) {
   const bool blocked = saving || importing_;
   choosePhoto_->setEnabled(!blocked);
   removePhoto_->setEnabled(!blocked && !photo_.isEmpty());
-  choosePhoto_->setText(photo_.isEmpty() ? QStringLiteral("&Foto hinzufügen")
-                                         : QStringLiteral("&Foto ersetzen"));
+  choosePhoto_->setText(photo_.isEmpty() ? QCoreApplication::translate("App", "&Foto hinzufügen")
+                                         : QCoreApplication::translate("App", "&Foto ersetzen"));
   name_->setEnabled(!blocked);
   maker_->setEnabled(!blocked);
   location_->setEnabled(!blocked);
   note_->setEnabled(!blocked);
   save_->setEnabled(!blocked);
   cancel_->setEnabled(!blocked);
-  save_->setText(saving ? QStringLiteral("Wird gespeichert …") : QStringLiteral("Speichern"));
+  save_->setText(saving ? QCoreApplication::translate("App", "Wird gespeichert …")
+                        : QCoreApplication::translate("App", "Speichern"));
 }
 
 void ItemEditor::save() {
@@ -241,7 +248,7 @@ void ItemEditor::importPath(const QString& path) {
   importing_ = true;
   validationError_ = false;
   setSaving(false);
-  error_->setText(QStringLiteral("Foto wird geprüft …"));
+  error_->setText(QCoreApplication::translate("App", "Foto wird geprüft …"));
   error_->show();
   if (!controller_.importFile(path, importToken_)) {
     importing_ = false;
@@ -253,7 +260,7 @@ void ItemEditor::removePhoto() {
     return;
   }
   photo_.clear();
-  photoView_->showMessage(QStringLiteral("Kein Foto"));
+  photoView_->showMessage(QCoreApplication::translate("App", "Kein Foto"));
   setSaving(false);
 }
 } // namespace vitrine

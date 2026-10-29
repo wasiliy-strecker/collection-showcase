@@ -1,5 +1,57 @@
 # Prüfbericht
 
+## Internationalisierung am 29. Oktober 2026
+
+Die aktuelle Fassung unterstützt sechs Sprachen mit je 113 App-Meldungen.
+`bash scripts/check.sh release` besteht mit 121 fachlichen Qt-Testausführungen
+in fünf Suiten sowie einer Katalogprüfung. Zehn zusätzliche Qt-Aufrufe sind
+Initialisierung und Abschluss. Die bisherigen 75 Fälle bleiben enthalten,
+46 neue Ausführungen prüfen Sprache, Einstellungen, regionale Formate,
+übersetzte Widgets und Fehler, kleine Fenster und unveränderte Daten/Fotos.
+
+Formatter, strenge Compilerwarnungen und clang-tidy bestehen.
+AddressSanitizer, LeakSanitizer und UndefinedBehaviorSanitizer bestehen ohne
+Unterdrückungen. Ruff und die Shell-Syntaxprüfung bestehen. Die neuen
+Übersetzungen werden beim Build zusammen mit den Qt-Basisübersetzungen eingebettet.
+Ein während der echten spanischen Bedienung erkanntes doppeltes Alt-Kürzel ist
+korrigiert. Die Katalogprüfung verhindert entsprechende Kollisionen künftig.
+
+Die internationale Paketabnahme verwendet ein eigenes Xvfb-Display und Openbox.
+Die Bilder zeigen echte Qt-Fenster und native GTK3-Dateiauswahl mit synthetischen
+Texten und eigenen Roboter-, Auto- und Vogelmotiven. Die normalen Nutzerdaten
+wurden nicht geöffnet. Der Entwicklerdesktop wurde nicht umgeschaltet.
+Die Vorschauen ersetzen keine native Windows-Abnahme.
+
+Der vollständige Ablauf umfasst je Sprache zwei echte Prozesse, Unicode-CRUD,
+PNG und JPEG, ungültigen Import mit erhaltenem Foto, Entfernen und Verwerfen,
+echte SQLite-Sperre, Wiederholung, sichere Abbruchvorauswahl, kleine Fenster,
+Einstellungsfehler und Sprachwechsel nach Neustart. Nach Entfernung der
+Quelldateien werden Texte und Foto-BLOBs unabhängig auf Bytegleichheit geprüft.
+Die Laufzeit startet mit bereinigten SDK-/Bibliotheksvariablen. Geladene Qt-,
+QSQLITE-, JPEG- und GTK3-Plugin-Dateien stammen aus dem eigenen Paket.
+Native Systemdialog-Schaltflächen dürfen weiterhin der OS-Sprache folgen.
+
+Zusätzlich besteht der bisherige deutsche Komplettablauf mit genau demselben
+Paket, bereinigter Umgebung, nativer Fotoauswahl, Datenbanksperren und zwei
+Neustarts. `build/international-legacy-gui/result.json` dokumentiert den Erfolg,
+`loaded-libraries.json` die geladenen Paketbibliotheken. Das deutsche Testprofil
+setzt die Sprache ausdrücklich, unabhängig von der Systemsprache.
+
+Quell- und Laufzeithashes sowie 24 Aufnahmen sind in
+`build/international-captures-final-v2/report.json` dokumentiert. Die Abnahme-
+und Fehlerbilder wurden visuell geprüft. Release- und Sanitizer-Protokolle
+liegen unter `build/international-release-check.log` und
+`build/international-asan-check.log`. Die Zusammenstellung kopiert diese
+Nachweise mit den Store-Texten und dem vorhandenen Branding in einen neuen
+Vorschauordner. Sie prüft Quellen, Laufzeit und alle Nachweishashes erneut.
+Die Lieferung erfolgt ohne ZIP. Anleitung: [Internationalisierung](internationalization.md).
+
+## Ursprüngliche Abnahme am 27. Oktober 2026
+
+Die folgenden Abschnitte dokumentieren den damaligen deutschen Funktionsstand.
+Aktuelle Sprachen und Testzahlen stehen oben. Frühere Archivlieferungen und
+Xephyr-Displays sind historische Nachweise, keine neue Lieferung.
+
 Stand: 27. Oktober 2026, SammlerVitrine 0.1.0. Alle nachfolgend als bestanden
 bezeichneten Prüfungen wurden für diese App ausgeführt. Zahlen und Ergebnisse
 wurden nicht aus BrettspielRegal übernommen.

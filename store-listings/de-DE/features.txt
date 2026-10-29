@@ -1,0 +1,5 @@
+Bezeichnung, Marke, Ort und Notizen verwalten
+Ein optionales JPEG- oder PNG-Foto pro Sammlerstück
+Alle vier Textfelder durchsuchen
+Lokale Speicherung ohne Konto
+Sechs wählbare Oberflächensprachen

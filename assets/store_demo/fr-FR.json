@@ -1,0 +1,42 @@
+{
+  "search": "brocante",
+  "items": [
+    [
+      "Robot en fer-blanc",
+      "Atelier Nord",
+      "Vitrine A · étagère 2",
+      "Trouvé à une brocante.\nBoîte d’origine sur l’étagère du haut."
+    ],
+    [
+      "Voiture miniature",
+      "Studio Mira",
+      "Vitrine A · étagère 1",
+      "Un petit souvenir du premier voyage."
+    ],
+    [
+      "Oiseau en porcelaine",
+      "Atelier Nord",
+      "Étagère près de la fenêtre",
+      "Cadeau de pendaison de crémaillère."
+    ],
+    [
+      "Souvenir sur carte postale",
+      "Studio Mira",
+      "Dossier de voyage",
+      "Texte manuscrit au dos."
+    ],
+    [
+      "Pot décoratif",
+      "Werkstatt Lin",
+      "Armoire B",
+      "Le couvercle et la base vont ensemble."
+    ]
+  ],
+  "photos": [
+    "images/robot.png",
+    "images/car.jpg",
+    "images/bird.png",
+    null,
+    null
+  ]
+}

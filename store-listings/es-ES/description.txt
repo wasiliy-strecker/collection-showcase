@@ -1,0 +1,5 @@
+SammlerVitrine da un lugar a tus objetos favoritos. Guarda el nombre, la marca o el fabricante, la ubicación y tus notas. Añade una foto opcional para reconocer cada objeto.
+
+Busca en los cuatro campos de texto, edita las entradas y conserva las historias de tu colección. Una foto JPEG o PNG se guarda con cada entrada. El archivo original no se modifica.
+
+Todo se guarda en tu ordenador. No necesitas cuenta ni conexión a Internet. Elige alemán, inglés, español, francés, italiano o portugués de Brasil. Los cambios de idioma se aplican al volver a iniciar la aplicación.

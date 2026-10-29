@@ -1,0 +1,42 @@
+{
+  "search": "feira de antiguidades",
+  "items": [
+    [
+      "Robô de lata",
+      "Atelier Nord",
+      "Vitrine A · prateleira 2",
+      "Encontrado em uma feira de antiguidades.\nCaixa original na prateleira de cima."
+    ],
+    [
+      "Carro em miniatura",
+      "Studio Mira",
+      "Vitrine A · prateleira 1",
+      "Uma pequena lembrança da primeira viagem."
+    ],
+    [
+      "Pássaro de porcelana",
+      "Atelier Nord",
+      "Prateleira perto da janela",
+      "Presente de casa nova."
+    ],
+    [
+      "Postal antigo",
+      "Studio Mira",
+      "Pasta de viagens",
+      "Texto escrito à mão no verso."
+    ],
+    [
+      "Recipiente decorativo",
+      "Werkstatt Lin",
+      "Armário B",
+      "A tampa e a base formam um conjunto."
+    ]
+  ],
+  "photos": [
+    "images/robot.png",
+    "images/car.jpg",
+    "images/bird.png",
+    null,
+    null
+  ]
+}

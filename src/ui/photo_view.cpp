@@ -1,17 +1,18 @@
 #include "ui/photo_view.h"
+#include <QCoreApplication>
 #include <QPainter>
 
 namespace vitrine {
 PhotoView::PhotoView(QWidget* parent) : QWidget(parent) {
   setMinimumSize(160, 120);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-  setAccessibleName(QStringLiteral("Foto des Sammlerstücks"));
-  showMessage(QStringLiteral("Kein Foto"));
+  setAccessibleName(QCoreApplication::translate("App", "Foto des Sammlerstücks"));
+  showMessage(QCoreApplication::translate("App", "Kein Foto"));
 }
 void PhotoView::showImage(const QImage& image) {
   image_ = image;
   message_.clear();
-  setAccessibleDescription(QStringLiteral("Gespeichertes Foto"));
+  setAccessibleDescription(QCoreApplication::translate("App", "Gespeichertes Foto"));
   update();
 }
 void PhotoView::showMessage(const QString& message) {

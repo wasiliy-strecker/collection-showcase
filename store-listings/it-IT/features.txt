@@ -1,0 +1,5 @@
+Gestisci nomi, marche, posizioni e note
+Una foto JPEG o PNG facoltativa per oggetto
+Ricerca nei quattro campi di testo
+Archiviazione locale senza account
+Sei lingue di interfaccia selezionabili

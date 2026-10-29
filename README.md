@@ -15,7 +15,7 @@ Die App wurde noch nicht veröffentlicht oder bei einem Store eingereicht.
 ## Entwickeln und starten
 
 C++20, CMake ab 3.25, Ninja und Qt **6.8.3** mit Core, Gui, Widgets, Sql,
-Test, QSQLITE und JPEG-Plugin. PNG ist im verwendeten Qt Gui eingebaut.
+Test, LinguistTools, QSQLITE und JPEG-Plugin. PNG ist im verwendeten Qt Gui eingebaut.
 Alle Qt-Komponenten müssen aus derselben SDK-Version und Compiler-ABI stammen.
 Lokal geprüft: Ubuntu 24.04.4 x64, GCC 13.3.0, CMake 4.4.4, Ninja 1.11.1,
 clang-format 23.1.3 und clang-tidy 22.1.8. Keine zusätzliche Bildbibliothek
@@ -55,6 +55,13 @@ werden. Die fertige App und ihre Pakete benötigen weder ein SDK noch andere App
 
 ## Bedienung
 
+Die Oberfläche unterstützt Deutsch, Englisch, Spanisch, Französisch,
+Italienisch und brasilianisches Portugiesisch. Beim ersten Start folgt sie der
+Systemsprache, mit Englisch als Rückfall. Unter „Sprache“ lässt sich die Auswahl
+speichern. Sie gilt beim nächsten Start. Texte, Datenbank und Fotos bleiben erhalten.
+Eigene Dialoge und Qt-Kontextmenüs folgen der App-Sprache. Bedienelemente nativer
+Dateiauswahldialoge können der Betriebssystemsprache folgen.
+
 „Hinzufügen“ und „Bearbeiten“ verwenden denselben Dialog. Nur die Bezeichnung
 ist erforderlich. Gleichnamige Sammlerstücke besitzen unabhängige IDs. Die Suche
 berücksichtigt alle vier Textfelder, Groß- und Kleinschreibung, Umlaute sowie
@@ -83,6 +90,7 @@ sofort. Während eines Imports oder Speicherns sind konkurrierende Aktionen gesp
 | --- | --- |
 | Strg+N / Cmd+N | Hinzufügen |
 | Strg+F / Cmd+F | Suche auswählen |
+| Strg+, / Cmd+, | Sprachwahl öffnen |
 | Enter oder Doppelklick in der Tabelle | Bearbeiten |
 | Entf in der Tabelle, Cmd+Rücktaste auf macOS | Löschbestätigung |
 | Strg+S / Cmd+S | Entwurf speichern |
@@ -112,7 +120,8 @@ Nutzerdaten liegen niemals im Quell- oder Programmverzeichnis. Es gibt keine
 Übernahme von BrettspielRegal-Daten. Eine zweite Instanz derselben Sammlung wird
 abgewiesen. Gleichzeitige Bearbeitung durch externe Programme wird nicht unterstützt.
 
-Zum Sichern die App schließen und die SQLite-Datei kopieren. `collection.lock`
+Zum Sichern die App schließen und die SQLite-Datei kopieren. Die optionale
+`language.txt` daneben enthält nur die Sprachwahl und kann mitgesichert werden. `collection.lock`
 ist keine Nutzerdatenbank. Entfernte Bilder können intern wiederverwendbaren
 freien Platz hinterlassen. Sofortige Dateiverkleinerung und sichere physische
 Datenlöschung werden nicht zugesagt.
@@ -130,7 +139,8 @@ ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 bash s
 
 [Architektur und Interviewerklärung](docs/architecture.md),
 [tatsächlich ausgeführte Prüfungen](docs/verification.md),
-[Paketierung und spätere Store-Schritte](docs/packaging.md) sowie
+[Paketierung und spätere Store-Schritte](docs/packaging.md),
+[Internationalisierung und Vorschauordner](docs/internationalization.md) sowie
 [Komponenten- und Lizenzhinweise](THIRD_PARTY_NOTICES.md) beschreiben die Umsetzung.
 
 | Stufe | Eigenständige App | Genau eine neue Hauptfunktion |
@@ -139,7 +149,7 @@ ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 bash s
 | 2 | SammlerVitrine | Ein Foto pro Eintrag |
 | 3 | ModellbauProjekt | Projektstatus |
 | 4 | HolzwerkProjekt | Checkliste |
-| 5, Reserve | RestaurierungsHeft | PDF-Export |
+| 5 | RestaurierungsHeft | PDF-Export |
 
 Jede weitere App behält die Grundfunktionen der vorherigen Stufe. SammlerVitrine
 bleibt ausschließlich Stufe 2. FactoryForge und PDF Batch Studio sind separate,

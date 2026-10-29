@@ -1,0 +1,4 @@
+Consulta tu colección con fotos y notas.
+Edita los detalles y añade o sustituye una foto.
+Encuentra objetos a través de tus notas.
+Elige el idioma para el próximo inicio.

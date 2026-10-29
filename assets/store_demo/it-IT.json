@@ -1,0 +1,42 @@
+{
+  "search": "mercatino",
+  "items": [
+    [
+      "Robot di latta",
+      "Atelier Nord",
+      "Vetrina A · ripiano 2",
+      "Trovato a un mercatino.\nScatola originale sul ripiano superiore."
+    ],
+    [
+      "Automobile in miniatura",
+      "Studio Mira",
+      "Vetrina A · ripiano 1",
+      "Un piccolo ricordo del primo viaggio."
+    ],
+    [
+      "Uccello di porcellana",
+      "Atelier Nord",
+      "Scaffale vicino alla finestra",
+      "Regalo per la casa nuova."
+    ],
+    [
+      "Vecchia cartolina",
+      "Studio Mira",
+      "Cartella dei viaggi",
+      "Testo scritto a mano sul retro."
+    ],
+    [
+      "Vasetto decorativo",
+      "Werkstatt Lin",
+      "Armadio B",
+      "Il coperchio e la base vanno insieme."
+    ]
+  ],
+  "photos": [
+    "images/robot.png",
+    "images/car.jpg",
+    "images/bird.png",
+    null,
+    null
+  ]
+}

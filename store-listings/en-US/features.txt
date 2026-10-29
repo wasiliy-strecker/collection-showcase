@@ -1,0 +1,5 @@
+Manage names, brands, locations, and notes
+One optional JPEG or PNG photo per collectible
+Search all four text fields
+Local storage without an account
+Six selectable interface languages

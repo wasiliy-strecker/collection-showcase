@@ -1,0 +1,42 @@
+{
+  "search": "Flohmarkt",
+  "items": [
+    [
+      "Blechroboter",
+      "Atelier Nord",
+      "Vitrine A · Fach 2",
+      "Fund vom Flohmarkt.\nOriginalschachtel im oberen Regal."
+    ],
+    [
+      "Miniaturauto",
+      "Studio Mira",
+      "Vitrine A · Fach 1",
+      "Kleines Erinnerungsstück an die erste Reise."
+    ],
+    [
+      "Porzellanvogel",
+      "Atelier Nord",
+      "Regal am Fenster",
+      "Geschenk zum Einzug."
+    ],
+    [
+      "Vintage-Postkarte",
+      "Studio Mira",
+      "Mappe Reise",
+      "Handschrift auf der Rückseite."
+    ],
+    [
+      "Zierdose",
+      "Werkstatt Lin",
+      "Schrank B",
+      "Deckel und Unterteil gehören zusammen."
+    ]
+  ],
+  "photos": [
+    "images/robot.png",
+    "images/car.jpg",
+    "images/bird.png",
+    null,
+    null
+  ]
+}
