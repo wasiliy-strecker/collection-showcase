@@ -3,11 +3,17 @@
 
 #include <QCollator>
 #include <QLocale>
+#include <QRegularExpression>
 #include <algorithm>
 
 namespace vitrine {
 
 ItemDraft validateDraft(ItemDraft draft) {
+  static const QRegularExpression colorPattern(
+      QStringLiteral("\\A#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?\\z"));
+  if (!draft.color.isEmpty() && !colorPattern.match(draft.color).hasMatch())
+    throw ValidationError(QCoreApplication::translate(
+        "App", "Die Farbe muss ein Hexwert wie #RRGGBB oder #RRGGBBAA sein."));
   draft.name = draft.name.trimmed();
   draft.maker = draft.maker.trimmed();
   draft.location = draft.location.trimmed();
@@ -30,7 +36,8 @@ ItemList searchItems(const ItemList& items, const QString& query, SortField fiel
   for (const auto& item : items) {
     const auto& f = item.fields;
     if (searchKey(f.name).contains(needle) || searchKey(f.maker).contains(needle) ||
-        searchKey(f.location).contains(needle) || searchKey(f.note).contains(needle)) {
+        searchKey(f.location).contains(needle) || searchKey(f.note).contains(needle) ||
+        searchKey(f.color).contains(needle)) {
       matches.append(item);
     }
   }
@@ -50,6 +57,9 @@ ItemList searchItems(const ItemList& items, const QString& query, SortField fiel
           comparison =
               collator.compare(left.fields.maker.normalized(QString::NormalizationForm_C),
                                right.fields.maker.normalized(QString::NormalizationForm_C));
+          break;
+        case SortField::Color:
+          comparison = collator.compare(left.fields.color, right.fields.color);
           break;
         case SortField::Location:
           comparison =

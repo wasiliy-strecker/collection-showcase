@@ -20,9 +20,10 @@ namespace vitrine {
 
 ItemEditor::ItemEditor(StorageController& controller, std::optional<Collectible> existing,
                        QWidget* parent, const QImage& preview)
-    : QDialog(parent), controller_(controller), name_(new QLineEdit(this)),
-      maker_(new QLineEdit(this)), location_(new QLineEdit(this)), note_(new QPlainTextEdit(this)),
-      error_(new QLabel(this)),
+    : QDialog(parent), controller_(controller),
+      color_(new ColorField(existing ? existing->fields.color : QString{}, this)),
+      name_(new QLineEdit(this)), maker_(new QLineEdit(this)), location_(new QLineEdit(this)),
+      note_(new QPlainTextEdit(this)), error_(new QLabel(this)),
       save_(new QPushButton(QCoreApplication::translate("App", "Speichern"), this)),
       cancel_(new QPushButton(QCoreApplication::translate("App", "Abbrechen"), this)),
       photoView_(new PhotoView(this)),
@@ -84,7 +85,7 @@ ItemEditor::ItemEditor(StorageController& controller, std::optional<Collectible>
   choosePhoto_->setAutoDefault(false);
   removePhoto_->setAutoDefault(false);
   connect(choosePhoto_, &QPushButton::clicked, this, [this] {
-    if (saving_ || importing_ || choosing_ || controller_.isBusy()) {
+    if (saving_ || importing_ || choosing_ || color_->isChoosing() || controller_.isBusy()) {
       return;
     }
     choosing_ = true;
@@ -113,6 +114,7 @@ ItemEditor::ItemEditor(StorageController& controller, std::optional<Collectible>
   form->addRow(hint);
   form->addRow(QCoreApplication::translate("App", "&Bezeichnung *"), name_);
   form->addRow(QCoreApplication::translate("App", "&Marke oder Hersteller"), maker_);
+  form->addRow(QCoreApplication::translate("App", "Farbe"), color_);
   form->addRow(QCoreApplication::translate("App", "&Aufbewahrungsort"), location_);
   form->addRow(QCoreApplication::translate("App", "&Notiz"), note_);
   form->addRow(photoView_);
@@ -174,11 +176,13 @@ ItemEditor::ItemEditor(StorageController& controller, std::optional<Collectible>
             error_->show();
             QTimer::singleShot(0, scroll, [this, scroll] { scroll->ensureWidgetVisible(error_); });
           });
+  color_->setTabOrderBetween(maker_, location_);
   name_->setFocus();
 }
 
 ItemDraft ItemEditor::draft() const {
-  return {name_->text(), maker_->text(), location_->text(), note_->toPlainText(), photo_};
+  return {name_->text(),        maker_->text(), location_->text(),
+          note_->toPlainText(), photo_,         color_->value()};
 }
 
 void ItemEditor::setSaving(bool saving) {
@@ -188,6 +192,7 @@ void ItemEditor::setSaving(bool saving) {
   removePhoto_->setEnabled(!blocked && !photo_.isEmpty());
   choosePhoto_->setText(photo_.isEmpty() ? QCoreApplication::translate("App", "&Foto hinzufügen")
                                          : QCoreApplication::translate("App", "&Foto ersetzen"));
+  color_->setEnabled(!blocked);
   name_->setEnabled(!blocked);
   maker_->setEnabled(!blocked);
   location_->setEnabled(!blocked);
@@ -199,7 +204,7 @@ void ItemEditor::setSaving(bool saving) {
 }
 
 void ItemEditor::save() {
-  if (saving_ || importing_ || choosing_ || controller_.isBusy()) {
+  if (saving_ || importing_ || choosing_ || color_->isChoosing() || controller_.isBusy()) {
     return;
   }
   try {
@@ -219,7 +224,7 @@ void ItemEditor::save() {
 }
 
 bool ItemEditor::requestClose() {
-  if (saving_ || importing_ || choosing_) {
+  if (saving_ || importing_ || choosing_ || color_->isChoosing()) {
     return false;
   }
   if (draft() != original_ && !confirmDiscard(this)) {
@@ -240,7 +245,8 @@ void ItemEditor::closeEvent(QCloseEvent* event) {
 }
 
 void ItemEditor::importPath(const QString& path) {
-  if (path.isEmpty() || saving_ || importing_ || choosing_ || controller_.isBusy()) {
+  if (path.isEmpty() || saving_ || importing_ || choosing_ || color_->isChoosing() ||
+      controller_.isBusy()) {
     return;
   }
   static std::atomic<quint64> nextToken{0};
@@ -256,7 +262,7 @@ void ItemEditor::importPath(const QString& path) {
   }
 }
 void ItemEditor::removePhoto() {
-  if (saving_ || importing_ || choosing_ || controller_.isBusy()) {
+  if (saving_ || importing_ || choosing_ || color_->isChoosing() || controller_.isBusy()) {
     return;
   }
   photo_.clear();

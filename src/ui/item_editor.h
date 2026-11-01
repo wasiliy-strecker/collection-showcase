@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ui/color_field.h"
 #include "ui/photo_view.h"
 #include "ui/storage_controller.h"
 
@@ -36,6 +37,7 @@ private:
   StorageController& controller_;
   qint64 id_ = 0;
   ItemDraft original_;
+  ColorField* color_;
   QLineEdit* name_;
   QLineEdit* maker_;
   QLineEdit* location_;

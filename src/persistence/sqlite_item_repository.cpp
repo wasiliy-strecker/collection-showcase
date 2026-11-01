@@ -91,6 +91,8 @@ private:
 
 void bindDraft(QSqlQuery& query, const ItemDraft& draft) {
   // Empty optional QString values must be TEXT, never SQL NULL.
+  query.bindValue(QStringLiteral(":color"),
+                  draft.color.isNull() ? QStringLiteral("") : draft.color);
   query.bindValue(QStringLiteral(":name"), draft.name.isNull() ? QStringLiteral("") : draft.name);
   query.bindValue(QStringLiteral(":maker"),
                   draft.maker.isNull() ? QStringLiteral("") : draft.maker);
@@ -169,7 +171,7 @@ void SqliteItemRepository::initialize() {
     }
     const int version = query.value(0).toInt();
     query.finish();
-    if (version > 1) {
+    if (version > 2) {
       throw StorageError(QCoreApplication::translate(
           "App", "Diese Datenbank benötigt eine neuere Version von Collection Showcase. "
                  "Die vorhandene Datei wird nicht verändert."));
@@ -185,7 +187,7 @@ void SqliteItemRepository::initialize() {
       execute(query, QStringLiteral("PRAGMA application_id=1398166612"));
       query.finish();
       transaction.commit();
-    } else if (version != 1) {
+    } else if (version != 1 && version != 2) {
       throw StorageError(QCoreApplication::translate(
           "App", "Die vorhandene Datei hat kein bekanntes Collection Showcase-Schema. "
                  "Sie wird nicht überschrieben."));
@@ -217,12 +219,24 @@ void SqliteItemRepository::initialize() {
                    query.value(5).toInt() == (isId ? 1 : 0) &&
                    (isId || isPhoto || query.value(3).toBool());
     }
-    if (!validTypes || columns != QStringList{QStringLiteral("id"), QStringLiteral("name"),
-                                              QStringLiteral("maker"), QStringLiteral("location"),
-                                              QStringLiteral("note"), QStringLiteral("photo")}) {
+    QStringList expected{QStringLiteral("id"),    QStringLiteral("name"),
+                         QStringLiteral("maker"), QStringLiteral("location"),
+                         QStringLiteral("note"),  QStringLiteral("photo")};
+    if (version == 2)
+      expected.append(QStringLiteral("color"));
+    if (!validTypes || columns != expected) {
       throw StorageError(
           QCoreApplication::translate("App", "Die Datenbankstruktur ist unbekannt oder beschädigt. "
                                              "Die Datei wird nicht ersetzt."));
+    }
+    if (isNew || version == 1) {
+      // Validate identity and the entire old schema before changing an existing collection.
+      // DDL and version change commit together. Failed upgrades leave all data intact.
+      Transaction migration(database_);
+      execute(query, QStringLiteral("ALTER TABLE items ADD COLUMN color TEXT NOT NULL DEFAULT ''"));
+      execute(query, QStringLiteral("PRAGMA user_version=2"));
+      query.finish();
+      migration.commit();
     }
     initialized_ = true;
   } catch (...) {
@@ -241,12 +255,16 @@ ItemList SqliteItemRepository::findAllInTransaction() {
   QSqlQuery query(database_);
   execute(query,
           QStringLiteral(
-              "SELECT id,name,maker,location,note,photo IS NOT NULL FROM items ORDER BY id"));
+              "SELECT id,name,maker,location,note,photo IS NOT NULL,color FROM items ORDER BY id"));
   ItemList items;
   while (query.next()) {
     items.append({query.value(0).toLongLong(),
-                  {query.value(1).toString(), query.value(2).toString(), query.value(3).toString(),
-                   query.value(4).toString()},
+                  {query.value(1).toString(),
+                   query.value(2).toString(),
+                   query.value(3).toString(),
+                   query.value(4).toString(),
+                   {},
+                   query.value(6).toString()},
                   query.value(5).toBool()});
   }
   if (query.lastError().isValid()) {
@@ -265,7 +283,7 @@ Collectible SqliteItemRepository::findInTransaction(qint64 id) {
   QSqlQuery query(database_);
   // Limit even externally injected BLOBs before Qt materializes their bytes.
   prepare(query, QStringLiteral("SELECT id,name,maker,location,note,length(photo),typeof(photo),"
-                                "CASE WHEN length(photo)<=10485760 THEN photo ELSE NULL END "
+                                "CASE WHEN length(photo)<=10485760 THEN photo ELSE NULL END,color "
                                 "FROM items WHERE id=:id"));
   query.bindValue(QStringLiteral(":id"), id);
   execute(query);
@@ -286,7 +304,7 @@ Collectible SqliteItemRepository::findInTransaction(qint64 id) {
   }
   return {query.value(0).toLongLong(),
           {query.value(1).toString(), query.value(2).toString(), query.value(3).toString(),
-           query.value(4).toString(), query.value(7).toByteArray()},
+           query.value(4).toString(), query.value(7).toByteArray(), query.value(8).toString()},
           hasPhoto};
 }
 
@@ -299,8 +317,8 @@ Collectible SqliteItemRepository::create(const ItemDraft& draft) {
 Collectible SqliteItemRepository::createInTransaction(const ItemDraft& draft) {
   const auto valid = validateDraft(draft);
   QSqlQuery query(database_);
-  prepare(query, QStringLiteral("INSERT INTO items(name,maker,location,note,photo) "
-                                "VALUES(:name,:maker,:location,:note,:photo)"));
+  prepare(query, QStringLiteral("INSERT INTO items(name,maker,location,note,photo,color) "
+                                "VALUES(:name,:maker,:location,:note,:photo,:color)"));
   bindDraft(query, valid);
   execute(query);
   const auto id = query.lastInsertId().toLongLong();
@@ -313,7 +331,7 @@ Collectible SqliteItemRepository::update(qint64 id, const ItemDraft& draft) {
   Transaction transaction(database_);
   QSqlQuery query(database_);
   prepare(query, QStringLiteral("UPDATE items SET name=:name,maker=:maker,location=:location,"
-                                "note=:note,photo=:photo WHERE id=:id"));
+                                "note=:note,photo=:photo,color=:color WHERE id=:id"));
   bindDraft(query, valid);
   query.bindValue(QStringLiteral(":id"), id);
   execute(query);

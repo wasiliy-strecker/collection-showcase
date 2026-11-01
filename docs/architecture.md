@@ -123,8 +123,8 @@ mit einem Worker statt zusätzlicher Threadpools.
 
 ## Schema und Fehler
 
-Schema 1 enthält `items(id,name,maker,location,note,photo)`.
-`PRAGMA user_version=1` und die app-eigene `application_id=1398166612` kennzeichnen
+Schema 2 enthält `items(id,name,maker,location,note,photo,color)`.
+`PRAGMA user_version=2` und die app-eigene `application_id=1398166612` kennzeichnen
 die Datenbank. Nur eine vorher nicht existierende Datei wird initialisiert.
 Vorhandene leere, beschädigte, fremde und unbekannt neuere Datenbanken werden
 abgewiesen. Integritätsprüfung und erwartete Spalten/Typen sichern den Start ab.
@@ -164,3 +164,24 @@ Offizielle Grundlagen: [QImageReader](https://doc.qt.io/qt-6.8/qimagereader.html
 [Qt-SQL und Threads](https://doc.qt.io/qt-6.8/threads-modules.html#threads-and-the-sql-module),
 [QByteArray-Wertsemantik](https://doc.qt.io/qt-6.8/implicit-sharing.html) und
 [Qt-Objektlebenszyklen](https://doc.qt.io/qt-6.8/objecttrees.html).
+
+## Farbfeld und Migration, 1. November 2026
+
+Der Entwurf enthält zusätzlich `color`. Leer bedeutet keine Farbe. Der
+Hexwert verwendet RGB mit optionalem Alpha am Ende. Die Domain prüft das
+Format, der app-lokale `ColorField` kapselt Auswahl, Abbrechen und Entfernen.
+`application/colors` verarbeitet sRGB-Werte und Schachbrett-Farbflächen mit
+QImage ohne Widgets. QWidget und QPixmap bleiben ausschließlich in der UI.
+
+Die SQLite-Erweiterung prüft zuerst App-Kennung, Schema und Integrität.
+`ALTER TABLE ... ADD COLUMN color TEXT NOT NULL DEFAULT ''` und
+`PRAGMA user_version=2` bilden eine Transaktion. Bei gesperrtem Commit wird
+auch die Schemaänderung zurückgerollt. IDs, Fotobytes und vorhandene
+Zusatzdaten werden weder kopiert noch neu vergeben. Schema 2 wird beim
+nächsten Start erneut validiert. Ältere Builds weisen es als zu neu zurück.
+
+JSON-Version 1 erhält das optionale Feld `color`. Der aktuelle Decoder liest
+auch frühere Einträge ohne dieses Feld als farblos. Neue Exporte enthalten es
+immer. Die alten strengen Decoder akzeptieren diese Erweiterung nicht.
+Fingerprints berücksichtigen Farbe, so dass verschiedenfarbige Einträge beim
+ergänzenden Import unabhängig bleiben. Wiederholter Import bleibt idempotent.

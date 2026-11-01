@@ -275,3 +275,35 @@ Die vorbereiteten GitHub-Workflows wurden nicht ausgeführt. Echte Store-Identit
 Publisher, Entwicklerteam, Signierung, konkrete Store-Lizenzprüfung, Metadaten,
 Einreichung und Veröffentlichung bleiben offen. Die Reihenfolge bleibt zuerst
 Microsoft Store und später Mac App Store. Es wurde nichts gepusht oder veröffentlicht.
+
+## Farbauswahl pro Eintrag, 1. November 2026
+
+Der Farbwähler wie in Yarn Box ist pro Eintrag optional. Palette, eigene Farben,
+Transparenz, Entfernen, Abbrechen, reine Farbänderungen und die Tab-Reihenfolge
+sind in sechs Sprachen geprüft. Tabelle, Suche und Sortierung berücksichtigen
+Farbkachel und Hexcode. Foto bleiben erhalten.
+
+Alle 12 CTest-Suiten bestehen im Entwicklungsbuild und mit AddressSanitizer
+und UndefinedBehaviorSanitizer. clang-format, Compilerwarnungen als Fehler und
+die statischen Prüfungen bestehen. Nach der Fokuskorrektur wurden die beiden
+betroffenen UI-Dateien zusätzlich mit clang-tidy geprüft. Die Tests umfassen
+RGB/RGBA, echte Schema-1-Fixtures, Migration mit unveränderten IDs und Inhalten,
+Rollback und Wiederholung eines gesperrten Umstiegs, atomare Schreibfehler,
+Altimporte ohne Farbe und idempotenten JSON-Transfer mit Farbunterschieden.
+
+`color_tests` und `collection_features_tests` bestehen zusätzlich mit xcb und
+GTK3 auf einem eigenen sichtbaren Xephyr-Display. Das eigenständige Paket
+unter `build/manual/color-package-final/sammlervitrine-0.1.0-linux-x64/`
+besteht `scripts/color_gui_smoke.py` und `scripts/gui_smoke.py` mit bereinigter
+Entwicklungsumgebung. Die Farbprüfung öffnet den nativen Picker mit Tab und
+Leertaste, bestätigt Weiß, bricht eine weitere Auswahl ab, entfernt die Farbe
+und prüft beide Zustände nach zwei Neustarts. Die bisherigen Abläufe prüfen
+außerdem Foto, Fehler, Löschen und Neustart ohne Bildquelle.
+Die veralteten Klickpositionen der Verwerf- und Löschdialoge im Prüfskript sind
+an die bereits vorhandene Button-Reihenfolge angepasst. Tastatureingaben sind
+auf die eigenen Prozessfenster begrenzt.
+
+Nachweise liegen unter `build/manual/colors/`, `build/manual/color-package-native/`
+und `build/manual/color-package-workflow/`. Tests verwenden ausschließlich
+synthetische Daten und temporäre Sammlungen. Native Windows- und macOS-Abnahmen
+bleiben offen. Keine Store-Veröffentlichung und kein Lieferarchiv.

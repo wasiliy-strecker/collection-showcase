@@ -14,6 +14,7 @@ struct ItemDraft {
   QString location;
   QString note;
   QByteArray photo{}; // Empty means no photo. Original encoded bytes otherwise.
+  QString color = {}; // Optional #RRGGBB or #RRGGBBAA.
   bool operator==(const ItemDraft&) const = default;
 };
 
@@ -33,7 +34,7 @@ public:
 
 ItemDraft validateDraft(ItemDraft draft);
 QString searchKey(const QString& text);
-enum class SortField : quint8 { Name, Details, Location, Photo };
+enum class SortField : quint8 { Name, Details, Color, Location, Photo };
 using TransferDraftList = QVector<ItemDraft>;
 ItemList searchItems(const ItemList& items, const QString& query, SortField field = SortField::Name,
                      Qt::SortOrder order = Qt::AscendingOrder);

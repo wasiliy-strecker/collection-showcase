@@ -1,4 +1,5 @@
 #include "ui/main_window.h"
+#include "ui/color_field.h"
 #include "ui/export_file_dialog.h"
 #include "ui/information_dialog.h"
 #include "ui/language_dialog.h"
@@ -110,11 +111,12 @@ MainWindow::MainWindow(StorageController& controller, QString dataDirectory,
   collectionLayout->addWidget(state_);
   table_->setObjectName(QStringLiteral("itemsTable"));
   table_->setAccessibleName(QCoreApplication::translate("App", "Sammlung"));
-  table_->setColumnCount(4);
+  table_->setColumnCount(5);
   auto* sortHeader = new SortHeader(table_);
   table_->setHorizontalHeader(sortHeader);
   table_->setHorizontalHeaderLabels({QCoreApplication::translate("App", "Bezeichnung"),
                                      QCoreApplication::translate("App", "Marke / Hersteller"),
+                                     QCoreApplication::translate("App", "Farbe"),
                                      QCoreApplication::translate("App", "Aufbewahrungsort"),
                                      QCoreApplication::translate("App", "Foto")});
   table_->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -126,7 +128,9 @@ MainWindow::MainWindow(StorageController& controller, QString dataDirectory,
   table_->verticalHeader()->setDefaultSectionSize(table_->fontMetrics().height() + 20);
   table_->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
   table_->horizontalHeader()->setMinimumSectionSize(105);
-  table_->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
+  table_->horizontalHeader()->setSectionResizeMode(4, QHeaderView::ResizeToContents);
+  table_->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+  table_->setIconSize(QSize(24, 24));
   table_->installEventFilter(this);
   collectionLayout->addWidget(table_, 1);
   auto* detail = new QWidget(splitter);
@@ -409,13 +413,15 @@ void MainWindow::refresh(std::optional<qint64> preferredId, int fallbackRow) {
                       : std::clamp(fallbackRow, 0, static_cast<int>(visibleItems_.size()) - 1);
   for (int row = 0; row < visibleItems_.size(); ++row) {
     const auto& item = visibleItems_.at(row);
-    const QStringList values{item.fields.name, item.fields.maker, item.fields.location,
-                             item.hasPhoto ? QCoreApplication::translate("App", "Ja")
-                                           : QStringLiteral("—")};
+    const QStringList values{
+        item.fields.name, item.fields.maker, item.fields.color, item.fields.location,
+        item.hasPhoto ? QCoreApplication::translate("App", "Ja") : QStringLiteral("—")};
     for (int column = 0; column < values.size(); ++column) {
       auto* cell = new QTableWidgetItem(values.at(column));
       cell->setData(Qt::UserRole, item.id);
       cell->setToolTip(values.at(column));
+      if (column == static_cast<int>(SortField::Color))
+        cell->setIcon(colorIcon(item.fields.color));
       table_->setItem(row, column, cell);
     }
     if (preferredId && item.id == *preferredId) {

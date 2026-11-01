@@ -37,8 +37,14 @@ def main():
             list(arguments), env=environment, text=True, stderr=subprocess.DEVNULL
         ).strip()
 
+    active = None
+
     def key(*keys):
         for value in keys:
+            assert command("xdotool", "getwindowpid", active) == str(process.pid)
+            command("xdotool", "windowactivate", "--sync", active)
+            command("xdotool", "windowfocus", "--sync", active)
+            assert command("xdotool", "getwindowfocus") == active
             command("xdotool", "key", "--clearmodifiers", value)
             time.sleep(0.18)
 
@@ -82,21 +88,30 @@ def main():
                 ).fetchall()
 
         def window(title):
-            identifier = wait_for(
-                lambda: command(
-                    "xdotool",
-                    "search",
-                    "--onlyvisible",
-                    "--all",
-                    "--pid",
-                    str(process.pid),
-                    "--name",
-                    title,
-                ).splitlines()[-1]
-            )
-            command("xdotool", "windowfocus", identifier)
-            time.sleep(0.15)
-            return identifier
+            nonlocal active
+
+            def find():
+                matches = command(
+                    "xdotool", "search", "--onlyvisible", "--all",
+                    "--pid", str(process.pid), "--name", title,
+                ).splitlines()
+                candidates = []
+                for identifier in matches:
+                    if command("xdotool", "getwindowpid", identifier) != str(process.pid):
+                        continue
+                    shape = dict(line.split("=", 1) for line in command(
+                        "xdotool", "getwindowgeometry", "--shell", identifier,
+                    ).splitlines())
+                    area = int(shape["WIDTH"]) * int(shape["HEIGHT"])
+                    if area > 20000:
+                        candidates.append((area, identifier))
+                return max(candidates)[1] if candidates else None
+
+            active = wait_for(find)
+            command("xdotool", "windowactivate", "--sync", active)
+            command("xdotool", "windowraise", active, "windowfocus", "--sync", active)
+            time.sleep(0.2)
+            return active
 
         def capture(identifier, name):
             time.sleep(0.15)
@@ -115,7 +130,7 @@ def main():
             )
             time.sleep(0.15)
 
-        def destructive(identifier, discard=False):
+        def destructive(identifier):
             geometry = dict(
                 line.split("=", 1)
                 for line in command(
@@ -124,7 +139,7 @@ def main():
             )
             click(
                 identifier,
-                int(geometry["WIDTH"]) - (198 if discard else 140),
+                int(geometry["WIDTH"]) - 50,
                 int(geometry["HEIGHT"]) - 24,
             )
 
@@ -144,7 +159,7 @@ def main():
             return main_window
 
         def stop():
-            command("xdotool", "windowfocus", main_window)
+            window("^Collection Showcase$")
             key("ctrl+q")
             process.wait(timeout=5)
             assert process.returncode == 0
@@ -170,7 +185,7 @@ def main():
         def discard():
             key("Escape")
             confirmation = window("Änderungen verwerfen")
-            destructive(confirmation, discard=True)
+            destructive(confirmation)
             window("^Collection Showcase$")
 
         try:
@@ -346,6 +361,9 @@ def main():
                 + "\n"
             )
             print(output / "result.json")
+        except Exception:
+            command("import", "-window", "root", str(output / "failure.png"))
+            raise
         finally:
             if process is not None and process.poll() is None:
                 process.terminate()
