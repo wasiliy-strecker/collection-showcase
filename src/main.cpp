@@ -3,6 +3,7 @@
 #include "persistence/language_preferences.h"
 #include "persistence/sqlite_item_repository.h"
 #include "ui/main_window.h"
+#include "ui/native_edit_menus.h"
 #include <QCoreApplication>
 
 #include <QApplication>
@@ -44,6 +45,9 @@ int main(int argc, char* argv[]) {
         vitrine::resolveDataDirectory(parser.value(dataOption), parser.isSet(dataOption));
     const auto preference = vitrine::readLanguagePreference(directory);
     translations.install(preference.value);
+#ifdef Q_OS_MACOS
+    vitrine::NativeEditMenus nativeEditMenus;
+#endif
     vitrine::StorageController controller(
         [directory] { return std::make_unique<vitrine::SqliteItemRepository>(directory); });
     vitrine::MainWindow window(controller, directory, preference.value);
