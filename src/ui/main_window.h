@@ -31,6 +31,10 @@ private:
   void openEditor(bool editing);
   void showEditor(std::optional<Collectible> item, const QImage& preview = {});
   void deleteSelected();
+  bool beginTransfer();
+  void finishTransfer(const QString& message);
+  void exportCollection();
+  void importCollection();
   void showAbout();
   void showLanguage();
   StorageController& controller_;
@@ -54,6 +58,10 @@ private:
   PhotoView* photoView_;
   quint64 readToken_ = 0;
   bool editLoading_ = false;
+  QPushButton* exportCollection_;
+  QPushButton* importCollection_;
+  QString transferDirectory_;
+  bool transferRunning_ = false;
   bool ready_ = false;
 };
 

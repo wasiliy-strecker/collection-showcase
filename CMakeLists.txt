@@ -23,7 +23,7 @@ else()
   endif()
 endif()
 
-add_library(item_i18n src/i18n/languages.cpp)
+add_library(item_i18n src/i18n/languages.cpp src/i18n/privacy_notice.cpp)
 target_include_directories(item_i18n PUBLIC src)
 target_link_libraries(item_i18n PUBLIC Qt6::Core PRIVATE project_options)
 set(app_languages de-DE en-US es-ES fr-FR it-IT pt-BR)
@@ -45,14 +45,15 @@ target_link_libraries(item_domain PUBLIC item_i18n PRIVATE project_options)
 add_library(item_photo src/application/photo_importer.cpp)
 target_include_directories(item_photo PUBLIC src)
 target_link_libraries(item_photo PUBLIC Qt6::Gui PRIVATE project_options)
-add_library(item_storage src/persistence/sqlite_item_repository.cpp src/persistence/data_directory.cpp src/persistence/language_preferences.cpp)
+add_library(item_storage src/application/collection_codec.cpp src/application/collection_transfer.cpp src/persistence/json_collection_file.cpp src/persistence/sqlite_item_repository.cpp src/persistence/data_directory.cpp src/persistence/language_preferences.cpp)
 target_link_libraries(item_storage PUBLIC item_domain item_photo Qt6::Sql PRIVATE project_options)
-add_library(item_ui src/ui/storage_controller.cpp src/ui/item_editor.cpp src/ui/main_window.cpp src/ui/ui_support.cpp src/ui/photo_view.cpp src/ui/language_dialog.cpp)
+add_library(item_ui src/ui/information_dialog.cpp src/ui/sort_header.cpp src/ui/export_file_dialog.cpp src/ui/storage_controller.cpp src/ui/item_editor.cpp src/ui/main_window.cpp src/ui/ui_support.cpp src/ui/photo_view.cpp src/ui/language_dialog.cpp)
 target_link_libraries(item_ui PUBLIC item_storage Qt6::Widgets PRIVATE project_options)
 qt_add_executable(sammlervitrine WIN32 MACOSX_BUNDLE src/main.cpp)
 target_link_libraries(sammlervitrine PRIVATE item_storage item_ui project_options)
 target_compile_definitions(sammlervitrine PRIVATE APP_VERSION="${PROJECT_VERSION}")
-qt_add_resources(sammlervitrine notices PREFIX "/licenses" FILES THIRD_PARTY_NOTICES.md)
+file(GLOB_RECURSE app_license_files CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/licenses/*")
+qt_add_resources(item_ui app_notices PREFIX "/notices" BASE "${CMAKE_CURRENT_SOURCE_DIR}" FILES THIRD_PARTY_NOTICES.md ${app_license_files})
 qt_add_resources(sammlervitrine branding PREFIX "/" FILES assets/branding/icon-256.png)
 if(WIN32)
   enable_language(RC)
@@ -61,13 +62,13 @@ if(WIN32)
 endif()
 set_target_properties(sammlervitrine PROPERTIES
   MACOSX_BUNDLE_GUI_IDENTIFIER de.appfabrik.sammlervitrine
-  MACOSX_BUNDLE_BUNDLE_NAME SammlerVitrine
+  MACOSX_BUNDLE_BUNDLE_NAME "Collection Showcase"
   MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
   MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION}
   MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/packaging/macos/Info.plist.in")
 
 if(BUILD_TESTING)
-  foreach(test_name domain repository dialogs photo i18n)
+  foreach(test_name transfer transfer_ui information collection_export_dialogs collection_features domain repository dialogs photo i18n)
     add_executable(${test_name}_tests tests/${test_name}_test.cpp)
     target_link_libraries(${test_name}_tests PRIVATE item_storage item_ui Qt6::Test project_options)
     add_test(NAME ${test_name} COMMAND ${test_name}_tests)

@@ -2,15 +2,26 @@
 
 #include "application/item_service.h"
 
+#include "application/collection_file.h"
 #include <QImage>
 #include <QObject>
 #include <QThread>
 #include <functional>
 #include <memory>
+#include <optional>
 
 namespace vitrine {
 
-enum class Operation : quint8 { Load, Save, Remove, Language };
+enum class Operation : quint8 {
+  InspectCollectionExport,
+  ExportCollection,
+  ReadCollectionImport,
+  ImportCollection,
+  Load,
+  Save,
+  Remove,
+  Language
+};
 struct ItemRequest {
   qint64 id;
   quint64 token;
@@ -30,6 +41,13 @@ public slots:
   void readItem(const vitrine::ItemRequest& request);
   void importFile(const QString& path, quint64 token);
 
+  void inspectCollectionExport(const QString& path, const QString& directory);
+  void exportCollection(const vitrine::CollectionExportTarget& target, bool replacementApproved,
+                        const QString& directory);
+  void readCollectionImport(const QString& path);
+  void importCollection();
+  void discardCollectionImport();
+
 signals:
   void loaded(const vitrine::ItemList& items);
   void itemRead(quint64 token, const vitrine::Collectible& item, const QImage& preview);
@@ -39,11 +57,16 @@ signals:
   void saved(const vitrine::Collectible& item);
   void removed(qint64 id);
   void languageSaved(const QString& preference);
+  void collectionExportInspected(const vitrine::CollectionExportTarget& target);
+  void collectionExported(qsizetype count);
+  void collectionImportReady(qsizetype count);
+  void collectionImported(const vitrine::CollectionImportResult& result);
   void failed(vitrine::Operation operation, const QString& message);
 
 private:
   RepositoryFactory factory_;
   std::unique_ptr<ItemRepository> repository_;
+  std::optional<TransferDraftList> pendingImport_;
 };
 
 class StorageController final : public QObject {
@@ -59,6 +82,13 @@ public:
   void readItem(const vitrine::ItemRequest& request);
   bool importFile(const QString& path, quint64 token);
 
+  bool inspectCollectionExport(const QString& path, const QString& directory);
+  bool exportCollection(const CollectionExportTarget& target, bool replacementApproved,
+                        const QString& directory);
+  bool readCollectionImport(const QString& path);
+  bool importCollection();
+  void discardCollectionImport();
+
 signals:
   void loaded(const vitrine::ItemList& items);
   void itemRead(quint64 token, const vitrine::Collectible& item, const QImage& preview);
@@ -68,6 +98,10 @@ signals:
   void saved(const vitrine::Collectible& item);
   void removed(qint64 id);
   void languageSaved(const QString& preference);
+  void collectionExportInspected(const vitrine::CollectionExportTarget& target);
+  void collectionExported(qsizetype count);
+  void collectionImportReady(qsizetype count);
+  void collectionImported(const vitrine::CollectionImportResult& result);
   void failed(vitrine::Operation operation, const QString& message);
   void busyChanged(bool busy);
   void loadRequested();
@@ -76,6 +110,13 @@ signals:
   void saveRequested(qint64 id, const vitrine::ItemDraft& draft);
   void removeRequested(qint64 id);
   void languageRequested(const QString& directory, const QString& preference);
+
+  void inspectCollectionExportRequested(const QString& path, const QString& directory);
+  void collectionExportRequested(const vitrine::CollectionExportTarget& target,
+                                 bool replacementApproved, const QString& directory);
+  void readCollectionImportRequested(const QString& path);
+  void collectionImportRequested();
+  void discardCollectionImportRequested();
 
 private:
   bool begin();

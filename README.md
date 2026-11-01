@@ -1,11 +1,39 @@
-# SammlerVitrine
+# Collection Showcase
+
+## Sammlung, Information und Sprache
+
+Hinzufügen steht oben rechts. Unter der Tabelle stehen Bearbeiten und Löschen.
+Die Spaltenüberschriften sortieren auf- und absteigend. Textspalten verwenden die
+aktuelle Sprache und eine natürliche Zahlenreihenfolge. Die Auswahl bleibt erhalten.
+
+Info enthält getrennte Fenster für Über die App, Datenschutz und Lizenzen.
+Alle Inhalte sind offline verfügbar. Neue Installationen verwenden die unterstützte
+Systemsprache mit Englisch als Fallback. Gespeicherte Sprachwahlen bleiben erhalten.
+
+Exportieren sichert die gesamte gespeicherte Sammlung als JSON mit eingebetteten
+Originalfotos. Importieren ergänzt
+fehlende Exemplare nach Bestätigung. Vorhandene Einträge werden nicht überschrieben.
+Erneuter Import derselben Datei legt keine zusätzlichen identischen Exemplare an.
+Exportdateien enthalten keine Spracheinstellung oder internen Eintrags-IDs.
+
+Eine Transferdatei darf höchstens 256 MiB und 10.000 Einträge enthalten.
+Die bisherigen Fotogrenzen bleiben bestehen. Maximal eine Million Zeichen je Textfeld. Die Grenze verändert vorhandene Daten nicht.
+Ein unvollständiger Import wird niemals gespeichert. Dateien anderer Apps und
+unbekannte Formatversionen werden abgewiesen. JSON-Dateien sind nicht verschlüsselt.
+
+Auf macOS wählst du erst einen Ordner und dann einen Dateinamen. Auf anderen
+Plattformen öffnet sich der Speicherdialog. Vorhandene Dateien werden erst nach
+Bestätigung und erneuter Prüfung ersetzt. Datenträger ohne Hardlinks werden für
+neue Dateien unterstützt. Bei hartem Abbruch kann dort eine unvollständige neue
+Datei zurückbleiben. Erstelle den Export dann erneut unter einem neuen Namen.
+
 
 Deine Figuren und Sammlerstücke an einem Ort. Erfasse eine Bezeichnung, optional
 Marke oder Hersteller, Aufbewahrungsort und eine mehrzeilige Notiz. Genau ein
 optionales Foto hilft beim Wiedererkennen. Die Sammlung bleibt vollständig lokal,
 ohne Konto oder Internet und unabhängig von der ursprünglichen Bilddatei.
 
-![SammlerVitrine mit synthetischem Blechroboter](docs/screenshots/sammlervitrine.png)
+![Collection Showcase mit synthetischem Blechroboter](docs/screenshots/sammlervitrine.png)
 
 Version 0.1.0 ist die zweite kleine C++-App des Hobby-Portfolios und ein
 nachvollziehbares Bewerbungsprojekt. Veröffentlichungsziele sind ausdrücklich
@@ -146,11 +174,20 @@ ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 bash s
 | Stufe | Eigenständige App | Genau eine neue Hauptfunktion |
 | --- | --- | --- |
 | 1 | BrettspielRegal | Einträge anlegen, bearbeiten, löschen und suchen |
-| 2 | SammlerVitrine | Ein Foto pro Eintrag |
+| 2 | Collection Showcase | Ein Foto pro Eintrag |
 | 3 | ModellbauProjekt | Projektstatus |
 | 4 | HolzwerkProjekt | Checkliste |
 | 5 | RestaurierungsHeft | PDF-Export |
 
-Jede weitere App behält die Grundfunktionen der vorherigen Stufe. SammlerVitrine
+Jede weitere App behält die Grundfunktionen der vorherigen Stufe. Collection Showcase
 bleibt ausschließlich Stufe 2. FactoryForge und PDF Batch Studio sind separate,
 größere Projekte. Es gibt keinen gemeinsamen Runtime-Kern oder kopierte Git-Historie.
+
+## JSON-Austauschformat
+
+Formatkennung `collection-showcase.collection`, Version `1`, Eintragsliste `items`.
+Jeder Eintrag enthält `name`, `maker`, `location`, `note` und `photoBase64`.
+Ohne Foto ist `photoBase64` null, sonst enthält es die ursprünglichen Bildbytes
+als kanonisches Base64. Interne Eintrags-IDs sind nicht Bestandteil des Formats.
+Dateien anderer Produkte, unbekannte Versionen und ungültige Felder werden
+abgewiesen. Der bestätigte Import verwendet einen bereits validierten Snapshot.

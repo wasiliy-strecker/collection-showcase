@@ -1,5 +1,13 @@
 # Paketierung und spätere Store-Schritte
 
+Aktueller öffentlicher Name: **Collection Showcase**. Alle sechs Oberflächensprachen bleiben
+verfügbar. Neue Installationen verwenden die unterstützte Systemsprache mit Englisch
+als Fallback. Die technischen Kennungen und Datenverzeichnisse bleiben unverändert.
+macOS erlaubt Zugriff auf ausgewählte Dateien und Ordner mit Lese-/Schreibrechten.
+Die Export-Ordnerwahl gewährt Zugriff auch für temporäre Nachbardateien.
+Native macOS-Sandbox und ein physischer exFAT-Datenträger benötigen eigene Abnahme.
+
+
 Veröffentlichungsreihenfolge: **zuerst Microsoft Store, danach Mac App Store**.
 Der Auftrag umfasst Entwicklung und vorbereitete Paketierung. Keine
 Store-Einreichung, Veröffentlichung, kostenpflichtige Lizenz oder Dienstleistung.

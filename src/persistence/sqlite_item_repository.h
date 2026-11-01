@@ -14,6 +14,8 @@ public:
   ~SqliteItemRepository() override;
   SqliteItemRepository(const SqliteItemRepository&) = delete;
   SqliteItemRepository& operator=(const SqliteItemRepository&) = delete;
+  TransferDraftList transferSnapshot() override;
+  CollectionImportResult importEntries(const TransferDraftList& drafts) override;
   void initialize() override;
   ItemList findAll() override;
   Collectible find(qint64 id) override;
@@ -22,6 +24,9 @@ public:
   void remove(qint64 id) override;
 
 private:
+  ItemList findAllInTransaction();
+  Collectible findInTransaction(qint64 id);
+  Collectible createInTransaction(const ItemDraft& draft);
   void close();
   QString directory_;
   QString connectionName_;

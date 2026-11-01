@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
+<?xml version='1.0' encoding='utf-8'?>
 <TS version="2.1" language="fr_FR" sourcelanguage="de_DE">
   <context>
     <name>App</name>
@@ -76,6 +75,10 @@
       <translation>Nom</translation>
     </message>
     <message>
+      <source>Bitte bestätige das Ersetzen der vorhandenen Exportdatei.</source>
+      <translation>Confirmez le remplacement du fichier d'exportation existant.</translation>
+    </message>
+    <message>
       <source>Bitte gib eine Bezeichnung ein.</source>
       <translation>Saisissez un nom.</translation>
     </message>
@@ -90,6 +93,18 @@
     <message>
       <source>Bitte wähle eine lesbare Bilddatei.</source>
       <translation>Choisissez un fichier image lisible.</translation>
+    </message>
+    <message>
+      <source>Collection Showcase kann nicht starten</source>
+      <translation>Impossible de démarrer Collection Showcase</translation>
+    </message>
+    <message>
+      <source>Collection Showcase-Sammlung (*.json *.JSON)</source>
+      <translation>Collection Collection Showcase (*.json *.JSON)</translation>
+    </message>
+    <message>
+      <source>Collection Showcase-Sammlung importieren</source>
+      <translation>Importer une collection Collection Showcase</translation>
     </message>
     <message>
       <source>Das Datenverzeichnis ist nicht beschreibbar. Prüfe deine Zugriffsrechte.</source>
@@ -136,8 +151,24 @@
       <translation>Le dossier de données personnel est indisponible.</translation>
     </message>
     <message>
+      <source>Dateiname ohne Ordnerpfad. Die Endung .json wird bei Bedarf ergänzt.</source>
+      <translation>Nom de fichier sans chemin de dossier. L’extension .json est ajoutée si nécessaire.</translation>
+    </message>
+    <message>
       <source>Daten werden verarbeitet …</source>
       <translation>Traitement des données…</translation>
+    </message>
+    <message>
+      <source>Datenschutz</source>
+      <translation>Confidentialité</translation>
+    </message>
+    <message>
+      <source>Datenschutzerklärung für Collection Showcase</source>
+      <translation>Politique de confidentialité de Collection Showcase</translation>
+    </message>
+    <message>
+      <source>Datenverzeichnis: %1</source>
+      <translation>Dossier de données : %1</translation>
     </message>
     <message>
       <source>Deine Sammlerstücke. Dein Platz für alles, was dazugehört.</source>
@@ -156,6 +187,14 @@
 %1</source>
       <translation>L'accès à la base de données a échoué. Vérifiez le disque et les droits d'accès, puis réessayez.
 %1</translation>
+    </message>
+    <message>
+      <source>Der Export konnte nicht sicher gespeichert werden. Prüfe Speicherplatz und Zugriffsrechte oder wähle einen anderen lokalen Ordner. Ein vorhandener Export bleibt erhalten.</source>
+      <translation>L'exportation n'a pas pu être enregistrée en toute sécurité. Vérifiez l'espace disponible et les autorisations ou choisissez un autre dossier local. Toute exportation existante est conservée.</translation>
+    </message>
+    <message>
+      <source>Der Import würde die Grenze von 10.000 Einträgen überschreiten. Die Sammlung bleibt unverändert.</source>
+      <translation>L’importation dépasserait la limite de 10 000 entrées. La collection reste inchangée.</translation>
     </message>
     <message>
       <source>Die Datenbank ist beschädigt oder keine gültige SQLite-Datei. Sie wird nicht ersetzt. Sichere die Datei vor einer Reparatur.</source>
@@ -178,12 +217,24 @@
       <translation>La structure de la base de données est inconnue ou endommagée. Le fichier ne sera pas remplacé.</translation>
     </message>
     <message>
+      <source>Die Importdatei konnte nicht gelesen werden. Prüfe die Zugriffsrechte. Die Sammlung bleibt unverändert.</source>
+      <translation>Le fichier à importer n'a pas pu être lu. Vérifiez les autorisations. Votre collection reste inchangée.</translation>
+    </message>
+    <message>
+      <source>Die Informationen konnten nicht geladen werden. Bitte installiere die App erneut.</source>
+      <translation>Impossible de charger les informations. Veuillez réinstaller l’application.</translation>
+    </message>
+    <message>
       <source>Die Sammlung ist noch nicht geladen.</source>
       <translation>La collection n'a pas encore été chargée.</translation>
     </message>
     <message>
       <source>Die Sammlung konnte nicht geöffnet werden.</source>
       <translation>Impossible d'ouvrir la collection.</translation>
+    </message>
+    <message>
+      <source>Die Sammlungsdatei enthält ungültige oder zu große Daten. Die Sammlung bleibt unverändert.</source>
+      <translation>Le fichier de collection contient des données incorrectes ou trop volumineuses. La collection reste inchangée.</translation>
     </message>
     <message>
       <source>Die Schema-Version konnte nicht gelesen werden.</source>
@@ -194,6 +245,14 @@
       <translation>Impossible d'enregistrer la langue. Vérifiez le dossier de données et vos droits d'accès. Le réglage précédent est conservé.</translation>
     </message>
     <message>
+      <source>Die Zieldatei wurde nach der Auswahl verändert. Wähle sie erneut. Sie wurde nicht ersetzt.</source>
+      <translation>Le fichier de destination a été modifié après sa sélection. Sélectionnez-le à nouveau. Il n'a pas été remplacé.</translation>
+    </message>
+    <message>
+      <source>Die folgenden Hinweise und Lizenztexte beschreiben die verwendeten Fremdkomponenten. Rechtliche Originaltexte werden in ihrer Originalsprache angezeigt. Weitere Laufzeithinweise befinden sich in den Lizenzordnern der installierten App.</source>
+      <translation>Les avis et licences ci-dessous décrivent les composants tiers de cette application. Les textes juridiques originaux sont affichés dans leur langue d’origine. D’autres avis sur l’environnement d’exécution figurent dans les dossiers de licences de l’application installée.</translation>
+    </message>
+    <message>
       <source>Die gespeicherte Sprache konnte nicht gelesen werden. Englisch wird verwendet. Wähle die Sprache erneut in den Einstellungen.</source>
       <translation>Impossible de lire la langue enregistrée. L'anglais est utilisé. Sélectionnez à nouveau la langue dans les paramètres.</translation>
     </message>
@@ -202,16 +261,24 @@
       <translation>La langue choisie s’applique au prochain démarrage. Vos objets et photos restent inchangés.</translation>
     </message>
     <message>
-      <source>Die vorhandene Datei hat kein bekanntes SammlerVitrine-Schema. Sie wird nicht überschrieben.</source>
-      <translation>Le fichier existant ne contient pas de schéma SammlerVitrine reconnu. Il ne sera pas écrasé.</translation>
+      <source>Die vorhandene Datei hat kein bekanntes Collection Showcase-Schema. Sie wird nicht überschrieben.</source>
+      <translation>Le fichier existant ne contient pas de schéma Collection Showcase reconnu. Il ne sera pas écrasé.</translation>
     </message>
     <message>
-      <source>Diese Datenbank benötigt eine neuere Version von SammlerVitrine. Die vorhandene Datei wird nicht verändert.</source>
-      <translation>Cette base de données nécessite une version plus récente de SammlerVitrine. Le fichier existant ne sera pas modifié.</translation>
+      <source>Dies ist keine gültige Collection Showcase-Sammlung. Wähle eine mit Exportieren erzeugte JSON-Datei. Die Sammlung bleibt unverändert.</source>
+      <translation>Ce fichier n'est pas une collection Collection Showcase valide. Choisissez un fichier JSON créé avec Exporter. Votre collection reste inchangée.</translation>
     </message>
     <message>
-      <source>Diese Datenbank gehört nicht zu SammlerVitrine. Sie wird nicht verändert.</source>
-      <translation>Cette base de données n’appartient pas à SammlerVitrine. Elle ne sera pas modifiée.</translation>
+      <source>Diese Datei verwendet eine nicht unterstützte Exportversion. Die Sammlung bleibt unverändert.</source>
+      <translation>Ce fichier utilise une version d'exportation non prise en charge. Votre collection reste inchangée.</translation>
+    </message>
+    <message>
+      <source>Diese Datenbank benötigt eine neuere Version von Collection Showcase. Die vorhandene Datei wird nicht verändert.</source>
+      <translation>Cette base de données nécessite une version plus récente de Collection Showcase. Le fichier existant ne sera pas modifié.</translation>
+    </message>
+    <message>
+      <source>Diese Datenbank gehört nicht zu Collection Showcase. Sie wird nicht verändert.</source>
+      <translation>Cette base de données n’appartient pas à Collection Showcase. Elle ne sera pas modifiée.</translation>
     </message>
     <message>
       <source>Diese Sammlung ist bereits in einer anderen App-Instanz geöffnet. Schließe sie dort und lade hier erneut.</source>
@@ -230,12 +297,48 @@
       <translation>Cet objet n’existe plus. Rechargez la collection. Vos saisies sont conservées.</translation>
     </message>
     <message>
+      <source>Eine Sammlung darf höchstens 10.000 Einträge und 256 MiB enthalten.</source>
+      <translation>Une collection peut contenir au maximum 10 000 entrées et 256 Mio.</translation>
+    </message>
+    <message>
+      <source>Eine Sammlungsdatei darf höchstens 10.000 Einträge und 256 MiB enthalten. Es wurde keine unvollständige Datei oder Sammlung gespeichert.</source>
+      <translation>Un fichier de collection peut contenir au maximum 10 000 entrées et 256 Mio. Aucun fichier ni aucune collection incomplets n'ont été enregistrés.</translation>
+    </message>
+    <message>
       <source>Eine lokale Sammlung für deine Sammlerstücke.</source>
       <translation>Une collection locale pour vos objets.</translation>
     </message>
     <message>
+      <source>Einträge importieren?</source>
+      <translation>Importer des entrées ?</translation>
+    </message>
+    <message>
+      <source>Einträge in der Datei: %1. Vorhandene Einträge bleiben erhalten. Bereits vorhandene identische Exemplare werden übersprungen. Nach dem Import wird die Suche geleert.</source>
+      <translation>Entrées dans le fichier : %1. Les entrées existants sont conservés. Les exemplaires identiques déjà présents sont ignorés. La recherche est effacée après l'importation.</translation>
+    </message>
+    <message>
+      <source>Entwicklung: Wasiliy Strecker · AppFabrik AI</source>
+      <translation>Développement : Wasiliy Strecker · AppFabrik AI</translation>
+    </message>
+    <message>
+      <source>Ersetzen</source>
+      <translation>Remplacer</translation>
+    </message>
+    <message>
       <source>Es ist nicht genügend Speicherplatz verfügbar. Schaffe Platz und versuche es erneut.</source>
       <translation>L'espace disque est insuffisant. Libérez de l'espace et réessayez.</translation>
+    </message>
+    <message>
+      <source>Export abgeschlossen. Einträge: %1.</source>
+      <translation>Exportation terminée. Entrées : %1.</translation>
+    </message>
+    <message>
+      <source>Export ersetzen?</source>
+      <translation>Remplacer l'exportation ?</translation>
+    </message>
+    <message>
+      <source>Exportieren</source>
+      <translation>Exporter</translation>
     </message>
     <message>
       <source>Foto</source>
@@ -276,12 +379,28 @@
       <translation>Photos (*.jpg *.jpeg *.png);;Tous les fichiers (*)</translation>
     </message>
     <message>
+      <source>Gesamte Sammlung exportieren</source>
+      <translation>Exporter toute la collection</translation>
+    </message>
+    <message>
       <source>Gespeichertes Foto</source>
       <translation>Photo enregistrée</translation>
     </message>
     <message>
       <source>Hinweis zum Speichern</source>
       <translation>Informations sur l'enregistrement</translation>
+    </message>
+    <message>
+      <source>Import abgeschlossen. Hinzugefügt: %1. Bereits vorhanden: %2.</source>
+      <translation>Importation terminée. Ajoutés : %1. Déjà présents : %2.</translation>
+    </message>
+    <message>
+      <source>Importieren</source>
+      <translation>Importer</translation>
+    </message>
+    <message>
+      <source>Info</source>
+      <translation>Info</translation>
     </message>
     <message>
       <source>Isoliertes absolutes Datenverzeichnis.</source>
@@ -302,6 +421,14 @@
     <message>
       <source>Keine Sammlerstücke gefunden. Ändere oder leere die Suche.</source>
       <translation>Aucun objet trouvé. Modifiez ou effacez la recherche.</translation>
+    </message>
+    <message>
+      <source>Lizenzen</source>
+      <translation>Licences</translation>
+    </message>
+    <message>
+      <source>Lokal auf diesem Computer gespeichert</source>
+      <translation>Enregistré localement sur cet ordinateur</translation>
     </message>
     <message>
       <source>Löschen</source>
@@ -336,22 +463,8 @@
       <translation>Facultatif</translation>
     </message>
     <message>
-      <source>SammlerVitrine %1
-
-Deine Sammlung bleibt lokal.
-Datenverzeichnis: %2
-
-%3</source>
-      <translation>SammlerVitrine %1
-
-Votre collection reste locale.
-Dossier de données : %2
-
-%3</translation>
-    </message>
-    <message>
-      <source>SammlerVitrine kann nicht starten</source>
-      <translation>Impossible de démarrer SammlerVitrine</translation>
+      <source>Ordner für den Export wählen</source>
+      <translation>Choisir un dossier d’exportation</translation>
     </message>
     <message>
       <source>Sammlerstück bearbeiten</source>
@@ -402,8 +515,64 @@ Dossier de données : %2
       <translation>Langue enregistrée. Elle sera appliquée au prochain démarrage.</translation>
     </message>
     <message>
+      <source>Stand: 1. November 2026</source>
+      <translation>Dernière mise à jour : 1 novembre 2026</translation>
+    </message>
+    <message>
       <source>Suche leeren</source>
       <translation>Effacer la recherche</translation>
+    </message>
+    <message>
+      <source>Verantwortlicher und Kontakt
+Wasiliy Strecker · AppFabrik AI
+Ludwigstrasse 23, 86152 Augsburg, Deutschland
+Datenschutz: contact@appfabrik-ai.de
+Support: support@appfabrik-ai.de
+
+Zweck und gespeicherte Daten
+Collection Showcase verwaltet deine privaten Einträge. Die App speichert Namen, Marken oder Hersteller, Aufbewahrungsorte, Notizen, interne Eintragskennungen und deine Spracheinstellung sowie ein optionales Foto je Eintrag standardmäßig lokal im Benutzerprofil deines Computers. Fotos bleiben als Originaldateiinhalt gespeichert und können Metadaten enthalten. Die Angaben können personenbezogene Informationen enthalten, wenn du sie selbst einträgst. Die Verarbeitung dient ausschließlich den von dir angeforderten Funktionen zum Verwalten, Suchen, Exportieren und Importieren deiner Sammlung.
+
+Lokale Verarbeitung
+Die App benötigt kein Konto und keinen Server. Sie übermittelt deine Sammlung und Spracheinstellung nicht an den Entwickler oder andere Empfänger. Sie enthält keine Werbung, Telemetrie, Nutzungsanalyse oder eigene Cloud-Synchronisierung. Die Datenschutzerklärung ist Bestandteil der App und wird ohne Internetverbindung angezeigt. Collection Showcase verschlüsselt weder seine gespeicherte Sammlung noch exportierte JSON-Dateien selbst. Der Schutz hängt auch von deinem Benutzerkonto, den Zugriffsrechten und einer gegebenenfalls aktivierten Datenträgerverschlüsselung ab.
+
+Import, Export und Sicherungskopien
+Die App liest ausgewählte JSON-Dateien und Fotos lokal. Ein JSON-Export enthält alle gespeicherten Einträge mit einem optionalen Foto je Eintrag. Er enthält keine internen Eintragskennungen und keine Spracheinstellung. Du bestimmst den Speicherort und eine mögliche Weitergabe. Exportierte Dateien sind eigenständige Kopien und werden durch Änderungen in der App nicht aktualisiert oder gelöscht. Synchronisierte Ordner, Netzlaufwerke oder Sicherungsdienste können diese Dateien außerhalb der App verarbeiten oder übertragen. Dafür gelten die Einstellungen und Datenschutzbedingungen des jeweiligen Anbieters. Collection Showcase steuert diese Dienste nicht.
+
+Speicherdauer und Löschung
+Die App bewahrt die Sammlung auf, bis du Einträge löschst oder die gespeicherten App-Daten entfernst. Du kannst Einträge in der App ansehen, bearbeiten und löschen. Zum vollständigen Entfernen der lokalen Sammlung und Spracheinstellung schließt du die App und entfernst ihren Datenordner. Die Speicherorte sind in der mitgelieferten Anleitung beschrieben. Exportdateien und andere Sicherungskopien musst du an ihren jeweiligen Speicherorten gesondert löschen. Das Löschen eines Eintrags ist keine garantierte sichere Löschung aller früheren Dateiinhalte. Verlasse dich nicht darauf, dass eine Deinstallation alle App-Daten und externen Kopien entfernt.
+
+Kontakt und Support
+Wenn du uns freiwillig eine E-Mail sendest, verarbeiten wir deine E-Mail-Adresse, den Nachrichteninhalt und beigefügte Dateien zur Bearbeitung der Anfrage. Deine lokal gespeicherte Sammlung wird dabei nicht automatisch mitgesendet. Rechtsgrundlage ist bei vertragsbezogenen Anfragen Artikel 6 Absatz 1 Buchstabe b DSGVO, ansonsten unser berechtigtes Interesse an der Beantwortung von Anfragen nach Artikel 6 Absatz 1 Buchstabe f DSGVO. Wir bewahren die Korrespondenz nur so lange auf, wie dies für die Bearbeitung und gesetzliche Aufbewahrungspflichten erforderlich ist.
+
+Deine Rechte und weitere Anbieter
+Soweit anwendbar, hast du Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch sowie das Recht auf Beschwerde bei einer Datenschutzaufsichtsbehörde. Nutze dafür den Datenschutzkontakt. Auf Sammlungen, die ausschließlich auf deinem Computer liegen, hat der Entwickler keinen Zugriff. Beim Bezug oder Aktualisieren über Apple App Store, Microsoft Store oder GitHub können diese Anbieter selbst Daten verarbeiten. Dafür gelten deren eigene Datenschutzbedingungen. Diese Erklärung beschreibt die Datenverarbeitung durch Collection Showcase und wird bei entsprechenden Änderungen aktualisiert.</source>
+      <translation>Responsable et contact
+Wasiliy Strecker · AppFabrik AI
+Ludwigstrasse 23, 86152 Augsbourg, Allemagne
+Confidentialité : contact@appfabrik-ai.de
+Assistance : support@appfabrik-ai.de
+
+Finalités et données enregistrées
+Collection Showcase organise vos entrées personnelles. L’application enregistre par défaut les noms, marques ou fabricants, emplacements, notes, identifiants internes et votre langue, ainsi que une photo facultative par entrée, localement dans le profil utilisateur de votre ordinateur. Les photos conservent leur contenu original et peuvent inclure des métadonnées. Les champs peuvent contenir des données personnelles si vous les saisissez. Le traitement sert uniquement aux fonctions demandées de gestion, recherche, exportation et importation de votre collection.
+
+Traitement local
+L’application ne nécessite ni compte ni serveur. Elle ne transmet pas votre collection ni votre choix de langue au développeur ou à d’autres destinataires. Elle ne contient ni publicité, ni télémétrie, ni analyse d’utilisation, ni synchronisation cloud intégrée. Cette politique fait partie de l’application et reste consultable sans connexion Internet. Collection Showcase ne chiffre pas lui-même la collection enregistrée ni les fichiers JSON exportés. Leur protection dépend aussi de votre compte utilisateur, des droits d’accès et du chiffrement du disque éventuellement activé.
+
+Importation, exportation et sauvegardes
+L’application lit localement les fichiers JSON et les photos sélectionnés. Un export JSON contient toutes les entrées enregistrées, y compris une photo facultative par entrée. Il exclut les identifiants internes des entrées et le choix de langue. Vous choisissez l’emplacement et un éventuel partage. Les fichiers exportés sont des copies indépendantes, qui ne sont ni actualisées ni supprimées par les modifications dans l’application. Les dossiers synchronisés, lecteurs réseau ou services de sauvegarde peuvent traiter ou transmettre ces fichiers hors de l’application. Leurs propres paramètres et conditions de confidentialité s’appliquent. Collection Showcase ne contrôle pas ces services.
+
+Conservation et suppression
+L’application conserve votre collection jusqu’à la suppression des entrées ou des données enregistrées de l’application. Vous pouvez consulter, modifier et supprimer les entrées dans l’application. Pour supprimer toute la collection locale et le choix de langue, fermez l’application et supprimez son dossier de données. Les emplacements sont décrits dans les instructions fournies. Les exports et autres sauvegardes doivent être supprimés séparément à leurs emplacements respectifs. Supprimer une entrée ne garantit pas l’effacement sécurisé de tous les anciens contenus des fichiers. Ne supposez pas qu’une désinstallation supprime toutes les données et copies externes.
+
+Contact et assistance
+Si vous nous envoyez volontairement un e-mail, nous traitons votre adresse e-mail, le message et ses pièces jointes pour répondre à votre demande. Votre collection locale n’est pas jointe automatiquement. La base juridique est l’article 6, paragraphe 1, point b du RGPD pour les demandes liées à un contrat. Pour les autres demandes, il s’agit de notre intérêt légitime à répondre aux sollicitations selon l’article 6, paragraphe 1, point f du RGPD. Nous conservons la correspondance uniquement pendant la durée nécessaire au traitement et aux obligations légales de conservation.
+
+Vos droits et autres fournisseurs
+Selon les dispositions applicables, vous disposez des droits d’accès, de rectification, d’effacement, de limitation du traitement, de portabilité et d’opposition, ainsi que du droit de déposer une réclamation auprès d’une autorité de protection des données. Utilisez le contact de confidentialité ci-dessus. Le développeur n’a pas accès aux collections stockées uniquement sur votre ordinateur. Lorsque vous obtenez ou mettez à jour l’application via Apple App Store, Microsoft Store ou GitHub, ces fournisseurs peuvent traiter des données de manière indépendante selon leurs propres conditions. Cette politique décrit le traitement de Collection Showcase et sera actualisée si celui-ci change.</translation>
+    </message>
+    <message>
+      <source>Version %1</source>
+      <translation>Version %1</translation>
     </message>
     <message>
       <source>Verwerfen</source>
@@ -412,6 +581,10 @@ Dossier de données : %2
     <message>
       <source>Vollständige Notiz</source>
       <translation>Note complète</translation>
+    </message>
+    <message>
+      <source>Vorgang abgebrochen.</source>
+      <translation>Opération annulée.</translation>
     </message>
     <message>
       <source>Was möchtest du dir zu diesem Sammlerstück merken?</source>
@@ -438,6 +611,14 @@ Dossier de données : %2
       <translation>Sélectionnez un objet.</translation>
     </message>
     <message>
+      <source>Wähle eine normale .json-Datei in einem vorhandenen Ordner außerhalb der App-Daten. Dateiverknüpfungen sind als Exportziel nicht erlaubt.</source>
+      <translation>Choisissez un fichier .json ordinaire dans un dossier existant en dehors des données de l'application. Les liens ne sont pas autorisés comme destinations d'exportation.</translation>
+    </message>
+    <message>
+      <source>Wähle zuerst eine gültige Importdatei.</source>
+      <translation>Choisissez d'abord un fichier d'importation valide.</translation>
+    </message>
+    <message>
       <source>Zu diesem Sammlerstück gibt es noch keine Notiz.</source>
       <translation>Cet objet n’a pas encore de note.</translation>
     </message>
@@ -454,12 +635,16 @@ Dossier de données : %2
       <translation>Abandonner les modifications ?</translation>
     </message>
     <message>
-      <source>Über SammlerVitrine</source>
-      <translation>À propos de SammlerVitrine</translation>
+      <source>Über Collection Showcase</source>
+      <translation>À propos de Collection Showcase</translation>
     </message>
     <message>
       <source>Über die App</source>
       <translation>À propos de l'application</translation>
+    </message>
+    <message>
+      <source>„%1“ ist bereits vorhanden. Durch die gesamte gespeicherte Sammlung ersetzen?</source>
+      <translation>« %1 » existe déjà. Le remplacer par toute la collection enregistrée ?</translation>
     </message>
     <message>
       <source>„%1“ wurde gespeichert, passt aber nicht zur aktuellen Suche. Mit „Suche leeren“ findest du es wieder.</source>

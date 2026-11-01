@@ -33,7 +33,10 @@ public:
 
 ItemDraft validateDraft(ItemDraft draft);
 QString searchKey(const QString& text);
-ItemList searchItems(const ItemList& items, const QString& query);
+enum class SortField : quint8 { Name, Details, Location, Photo };
+using TransferDraftList = QVector<ItemDraft>;
+ItemList searchItems(const ItemList& items, const QString& query, SortField field = SortField::Name,
+                     Qt::SortOrder order = Qt::AscendingOrder);
 
 } // namespace vitrine
 

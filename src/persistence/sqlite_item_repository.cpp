@@ -1,6 +1,9 @@
 #include "persistence/sqlite_item_repository.h"
+#include "application/collection_codec.h"
 #include "application/photo_importer.h"
 #include <QCoreApplication>
+#include <QJsonDocument>
+#include <QMap>
 
 #include <QDir>
 #include <QFileInfo>
@@ -168,7 +171,7 @@ void SqliteItemRepository::initialize() {
     query.finish();
     if (version > 1) {
       throw StorageError(QCoreApplication::translate(
-          "App", "Diese Datenbank benötigt eine neuere Version von SammlerVitrine. "
+          "App", "Diese Datenbank benötigt eine neuere Version von Collection Showcase. "
                  "Die vorhandene Datei wird nicht verändert."));
     }
     if (isNew) {
@@ -184,13 +187,13 @@ void SqliteItemRepository::initialize() {
       transaction.commit();
     } else if (version != 1) {
       throw StorageError(QCoreApplication::translate(
-          "App", "Die vorhandene Datei hat kein bekanntes SammlerVitrine-Schema. "
+          "App", "Die vorhandene Datei hat kein bekanntes Collection Showcase-Schema. "
                  "Sie wird nicht überschrieben."));
     }
     execute(query, QStringLiteral("PRAGMA application_id"));
     if (!query.next() || query.value(0).toInt() != 1398166612) {
       throw StorageError(QCoreApplication::translate(
-          "App", "Diese Datenbank gehört nicht zu SammlerVitrine. Sie wird nicht verändert."));
+          "App", "Diese Datenbank gehört nicht zu Collection Showcase. Sie wird nicht verändert."));
     }
     query.finish();
     execute(query, QStringLiteral("PRAGMA quick_check"));
@@ -229,6 +232,12 @@ void SqliteItemRepository::initialize() {
 }
 
 ItemList SqliteItemRepository::findAll() {
+  Transaction transaction(database_);
+  auto result = findAllInTransaction();
+  transaction.commit();
+  return result;
+}
+ItemList SqliteItemRepository::findAllInTransaction() {
   QSqlQuery query(database_);
   execute(query,
           QStringLiteral(
@@ -247,6 +256,12 @@ ItemList SqliteItemRepository::findAll() {
 }
 
 Collectible SqliteItemRepository::find(qint64 id) {
+  Transaction transaction(database_);
+  auto result = findInTransaction(id);
+  transaction.commit();
+  return result;
+}
+Collectible SqliteItemRepository::findInTransaction(qint64 id) {
   QSqlQuery query(database_);
   // Limit even externally injected BLOBs before Qt materializes their bytes.
   prepare(query, QStringLiteral("SELECT id,name,maker,location,note,length(photo),typeof(photo),"
@@ -276,8 +291,13 @@ Collectible SqliteItemRepository::find(qint64 id) {
 }
 
 Collectible SqliteItemRepository::create(const ItemDraft& draft) {
-  const auto valid = validateDraft(draft);
   Transaction transaction(database_);
+  auto result = createInTransaction(draft);
+  transaction.commit();
+  return result;
+}
+Collectible SqliteItemRepository::createInTransaction(const ItemDraft& draft) {
+  const auto valid = validateDraft(draft);
   QSqlQuery query(database_);
   prepare(query, QStringLiteral("INSERT INTO items(name,maker,location,note,photo) "
                                 "VALUES(:name,:maker,:location,:note,:photo)"));
@@ -285,7 +305,6 @@ Collectible SqliteItemRepository::create(const ItemDraft& draft) {
   execute(query);
   const auto id = query.lastInsertId().toLongLong();
   query.finish();
-  transaction.commit();
   return {id, valid, !valid.photo.isEmpty()};
 }
 
@@ -313,6 +332,61 @@ void SqliteItemRepository::remove(qint64 id) {
   requireAffectedRow(query);
   query.finish();
   transaction.commit();
+}
+
+TransferDraftList SqliteItemRepository::transferSnapshot() {
+  Transaction transaction(database_);
+  const auto rows = findAllInTransaction();
+  if (rows.size() > maxTransferEntries)
+    throw TransferError(QCoreApplication::translate(
+        "App", "Eine Sammlung darf höchstens 10.000 Einträge und 256 MiB enthalten."));
+  TransferDraftList result;
+  qint64 size = 0;
+  for (const auto& row : rows) {
+    auto draft = findInTransaction(row.id).fields;
+    size += QJsonDocument(encodeEntry(draft)).toJson(QJsonDocument::Compact).size() + 8;
+    if (size > maxTransferBytes)
+      throw TransferError(QCoreApplication::translate(
+          "App", "Eine Sammlung darf höchstens 10.000 Einträge und 256 MiB enthalten."));
+    result.append(std::move(draft));
+  }
+  transaction.commit();
+  return result;
+}
+CollectionImportResult SqliteItemRepository::importEntries(const TransferDraftList& drafts) {
+  if (drafts.size() > maxTransferEntries)
+    throw TransferError(QCoreApplication::translate(
+        "App", "Eine Sammlung darf höchstens 10.000 Einträge und 256 MiB enthalten."));
+  qint64 size = 0;
+  for (const auto& draft : drafts) {
+    size += QJsonDocument(encodeEntry(draft)).toJson(QJsonDocument::Compact).size() + 8;
+    if (size > maxTransferBytes)
+      throw TransferError(QCoreApplication::translate(
+          "App", "Eine Sammlung darf höchstens 10.000 Einträge und 256 MiB enthalten."));
+  }
+  Transaction transaction(database_);
+  const auto existing = findAllInTransaction();
+  QMap<QByteArray, qsizetype> available;
+  for (const auto& row : existing)
+    ++available[entryFingerprint(findInTransaction(row.id).fields)];
+  CollectionImportResult result;
+  for (const auto& draft : drafts) {
+    auto& copies = available[entryFingerprint(draft)];
+    if (copies > 0) {
+      --copies;
+      ++result.skipped;
+      continue;
+    }
+    if (existing.size() + result.added >= maxTransferEntries)
+      throw TransferError(
+          QCoreApplication::translate("App", "Der Import würde die Grenze von 10.000 Einträgen "
+                                             "überschreiten. Die Sammlung bleibt unverändert."));
+    (void)createInTransaction(draft);
+    ++result.added;
+  }
+  result.entries = findAllInTransaction();
+  transaction.commit();
+  return result;
 }
 
 } // namespace vitrine

@@ -1,4 +1,4 @@
-SammlerVitrine gibt deinen Lieblingsstücken einen festen Platz. Erfasse Bezeichnung, Marke oder Hersteller, Aufbewahrungsort und persönliche Notizen. Ein optionales Foto hilft beim Wiedererkennen.
+Collection Showcase gibt deinen Lieblingsstücken einen festen Platz. Erfasse Bezeichnung, Marke oder Hersteller, Aufbewahrungsort und persönliche Notizen. Ein optionales Foto hilft beim Wiedererkennen.
 
 Durchsuche alle vier Textfelder, bearbeite Einträge und halte die Erinnerungen an deine Sammlung fest. Ein JPEG- oder PNG-Foto wird direkt mit dem Eintrag gespeichert. Die Originaldatei bleibt unverändert.
 

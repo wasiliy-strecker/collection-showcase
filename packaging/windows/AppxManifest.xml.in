@@ -5,7 +5,7 @@
  IgnorableNamespaces="uap rescap">
   <Identity Name="@IDENTITY_NAME@" Publisher="@PUBLISHER@" Version="0.1.0.0" ProcessorArchitecture="x64"/>
   <Properties>
-    <DisplayName>SammlerVitrine</DisplayName>
+    <DisplayName>Collection Showcase</DisplayName>
     <PublisherDisplayName>@PUBLISHER_DISPLAY_NAME@</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -13,7 +13,7 @@
   <Dependencies><TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.26100.0"/></Dependencies>
   <Applications>
     <Application Id="SammlerVitrine" Executable="sammlervitrine.exe" EntryPoint="Windows.FullTrustApplication">
-      <uap:VisualElements DisplayName="SammlerVitrine" Description="Deine private Sammlung"
+      <uap:VisualElements DisplayName="Collection Showcase" Description="Deine private Sammlung"
         BackgroundColor="transparent" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png"/>
     </Application>
   </Applications>

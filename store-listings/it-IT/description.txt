@@ -1,4 +1,4 @@
-SammlerVitrine dà un posto ai tuoi oggetti preferiti. Registra nome, marca o produttore, posizione e note personali. Aggiungi una foto facoltativa per riconoscere ogni oggetto.
+Collection Showcase dà un posto ai tuoi oggetti preferiti. Registra nome, marca o produttore, posizione e note personali. Aggiungi una foto facoltativa per riconoscere ogni oggetto.
 
 Cerca nei quattro campi di testo, modifica le voci e conserva le storie della tua collezione. Una foto JPEG o PNG viene salvata con ogni voce. Il file originale resta invariato.
 

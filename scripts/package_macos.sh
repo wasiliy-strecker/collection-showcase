@@ -18,8 +18,8 @@ ctest --preset release
 mkdir -p "$sammler_stage"
 cp README.md THIRD_PARTY_NOTICES.md "$sammler_stage/"
 cp -R docs "$sammler_stage/docs"
-cp -R build/release/sammlervitrine.app "$sammler_stage/SammlerVitrine.app"
-sammler_app="$sammler_stage/SammlerVitrine.app"
+cp -R build/release/sammlervitrine.app "$sammler_stage/Collection Showcase.app"
+sammler_app="$sammler_stage/Collection Showcase.app"
 "$SAMMLERVITRINE_QT_ROOT/bin/macdeployqt" "$sammler_app" -always-overwrite -appstore-compliant
 test -f "$sammler_app/Contents/PlugIns/sqldrivers/libqsqlite.dylib"
 test -f "$sammler_app/Contents/PlugIns/platforms/libqcocoa.dylib"
@@ -45,7 +45,7 @@ iconutil -c icns "$sammler_icons" -o "$sammler_app/Contents/Resources/SammlerVit
 /usr/libexec/PlistBuddy -c "Add :CFBundleIconFile string SammlerVitrine.icns" "$sammler_app/Contents/Info.plist"
 # Ad-hoc signing permits local Apple-Silicon testing. It is not a distribution identity.
 codesign --force --deep --sign - "$sammler_app"
-hdiutil create -volname SammlerVitrine -srcfolder "$sammler_stage" -ov -format UDZO "$sammler_dmg"
+hdiutil create -volname "Collection Showcase" -srcfolder "$sammler_stage" -ov -format UDZO "$sammler_dmg"
 shasum -a 256 "$sammler_dmg" > "$sammler_dmg.sha256"
 echo "$sammler_dmg"
 echo "Native GUI-Abnahme und spätere Store-Signierung bleiben erforderlich."

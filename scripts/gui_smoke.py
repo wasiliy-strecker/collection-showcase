@@ -137,7 +137,7 @@ def main():
                 stdout=log,
                 stderr=log,
             )
-            main_window = window("^SammlerVitrine$")
+            main_window = window("^Collection Showcase$")
             command("xdotool", "windowfocus", main_window)
             wait_for(lambda: rows() is not None)
             time.sleep(0.25)
@@ -163,7 +163,7 @@ def main():
             window("^Sammlerstück (hinzufügen|bearbeiten)$")
 
         def edit():
-            window("^SammlerVitrine$")
+            window("^Collection Showcase$")
             key("alt+b")
             return window("^Sammlerstück bearbeiten$")
 
@@ -171,7 +171,7 @@ def main():
             key("Escape")
             confirmation = window("Änderungen verwerfen")
             destructive(confirmation, discard=True)
-            window("^SammlerVitrine$")
+            window("^Collection Showcase$")
 
         try:
             source = directory / "figur.png"
@@ -220,7 +220,7 @@ def main():
             assert original[5] == original_bytes
             time.sleep(0.5)
             capture(main_window, "05-saved")
-            window("^SammlerVitrine$")
+            window("^Collection Showcase$")
             key("ctrl+f")
             type_text("ÖMER")
             capture(main_window, "06-note-search")
@@ -260,7 +260,7 @@ def main():
             wait_for(lambda: rows()[0][3] == "Arbeitszimmer, Vitrine 3")
             assert rows()[0][5] == replacement_bytes
             assert rows()[0][0] == original[0]
-            window("^SammlerVitrine$")
+            window("^Collection Showcase$")
             key("ctrl+n")
             window("^Sammlerstück hinzufügen$")
             type_text("Blechroboter")
@@ -312,12 +312,12 @@ def main():
             key("alt+e", "ctrl+s")
             wait_for(lambda: rows()[0][5] is None)
             assert rows()[1][5] == original_bytes
-            window("^SammlerVitrine$")
+            window("^Collection Showcase$")
             key("alt+l")
             window("Sammlerstück löschen")
             key("Escape")
             assert len(rows()) == 2
-            window("^SammlerVitrine$")
+            window("^Collection Showcase$")
             key("alt+l")
             confirmation = window("Sammlerstück löschen")
             capture(confirmation, "15-delete-confirmation")
@@ -325,7 +325,7 @@ def main():
             wait_for(lambda: len(rows()) == 1)
             assert rows()[0][0] == before_restart[1][0]
             assert rows()[0][5] == original_bytes
-            window("^SammlerVitrine$")
+            window("^Collection Showcase$")
             key("alt+l")
             confirmation = window("Sammlerstück löschen")
             destructive(confirmation)

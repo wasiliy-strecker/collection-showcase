@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
   QCoreApplication::setApplicationName(QStringLiteral("de.appfabrik.sammlervitrine"));
   QCoreApplication::setOrganizationDomain(QStringLiteral("appfabrik.de"));
   QCoreApplication::setApplicationVersion(QStringLiteral(APP_VERSION));
-  QApplication::setApplicationDisplayName(QStringLiteral("SammlerVitrine"));
+  QApplication::setApplicationDisplayName(QStringLiteral("Collection Showcase"));
   QApplication::setWindowIcon(QIcon(QStringLiteral(":/assets/branding/icon-256.png")));
   vitrine::Translations translations;
   translations.install(QStringLiteral("auto"));
@@ -56,9 +56,9 @@ int main(int argc, char* argv[]) {
     }
     return QApplication::exec();
   } catch (const std::exception& error) {
-    QMessageBox::critical(nullptr,
-                          QCoreApplication::translate("App", "SammlerVitrine kann nicht starten"),
-                          QString::fromUtf8(error.what()));
+    QMessageBox::critical(
+        nullptr, QCoreApplication::translate("App", "Collection Showcase kann nicht starten"),
+        QString::fromUtf8(error.what()));
     return 1;
   }
 }
