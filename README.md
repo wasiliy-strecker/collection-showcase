@@ -163,7 +163,9 @@ Abbrechen bleiben außerhalb des scrollenden Formulars erreichbar.
 
 ## Daten und Sicherung
 
-App-ID: `de.appfabrik.sammlervitrine`. Die eigene Datei `sammlervitrine.sqlite3`
+Mac-Bundle-ID für die Store-Registrierung: `de.appfabrik.collectionshowcase`.
+Die interne Datenkennung bleibt aus Kompatibilitätsgründen
+`de.appfabrik.sammlervitrine`. Die eigene Datei `sammlervitrine.sqlite3`
 enthält Texte und Foto-BLOBs. QStandardPaths bestimmt das persönliche Verzeichnis.
 „Über die App“ zeigt den tatsächlich verwendeten Pfad.
 

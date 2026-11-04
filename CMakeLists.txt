@@ -61,7 +61,7 @@ if(WIN32)
   target_sources(sammlervitrine PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/app.rc")
 endif()
 set_target_properties(sammlervitrine PROPERTIES
-  MACOSX_BUNDLE_GUI_IDENTIFIER de.appfabrik.sammlervitrine
+  MACOSX_BUNDLE_GUI_IDENTIFIER de.appfabrik.collectionshowcase
   MACOSX_BUNDLE_BUNDLE_NAME "Collection Showcase"
   MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
   MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION}

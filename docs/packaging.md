@@ -120,7 +120,7 @@ bash scripts/package_macos.sh
 Der Helfer baut und testet nativ, erzeugt `SammlerVitrine.app` und bündelt Qt
 mit macdeployqt. QSQLITE, JPEG und Cocoa werden geprüft. Übersetzungen,
 Lizenzhinweise und eigenes Icon werden ergänzt. Bundle-ID ist
-`de.appfabrik.sammlervitrine`. Eine DMG dient der Testlieferung.
+`de.appfabrik.collectionshowcase`. Eine DMG dient der Testlieferung.
 Ad-hoc-Signierung ermöglicht lokale Tests, ist aber keine vertrauenswürdige
 Veröffentlichungssignatur. `-appstore-compliant` ist keine Store-Freigabe.
 
@@ -132,7 +132,7 @@ Der Import aus dem Hintergrundthread und die Dateiauswahl müssen im tatsächlic
 signierten Sandbox-Bundle auf einem Mac abgenommen werden.
 
 QStandardPaths liefert in der Sandbox einen Pfad im eigenen App-Container,
-typischerweise unter `~/Library/Containers/de.appfabrik.sammlervitrine/Data/`.
+typischerweise unter `~/Library/Containers/de.appfabrik.collectionshowcase/Data/`.
 Den vollständigen Datenpfad dort in „Über die App“ prüfen. Keine automatische
 Migration anderer Sammlungen. `--data-dir` muss bei Sandbox-Tests zugänglich sein.
 

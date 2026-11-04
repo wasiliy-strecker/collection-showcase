@@ -110,3 +110,13 @@ oder GitHub Pages pflegen. Menütexte und Startfehler bleiben lokalisiert.
 Der Python-Export kopiert ausschließlich die Originaldatei und ihre URL in
 einen neuen Lieferordner. Alte Lieferungen sind historische Nachweise.
 Diese Entscheidung ersetzt die älteren Vorgaben zum Offline-Datenschutzdialog.
+
+## Englische Bundle-ID, 4. November 2026
+
+Der Nutzer legt für die erste Mac-Store-Registrierung ausdrücklich
+`de.appfabrik.collectionshowcase` fest. Diese Bundle-ID in CMake, Info.plist und
+Store-Metadaten verwenden. Sie ersetzt dort `de.appfabrik.sammlervitrine`.
+Neue IDs und Code-Bezeichner möglichst auf Englisch; `de.appfabrik` bleibt.
+Die bisherige interne Datenkennung `de.appfabrik.sammlervitrine`, vorhandene
+Datenpfade, SQLite-application_id, Datenbankdatei und JSON-Format bleiben aus
+Kompatibilitätsgründen erhalten. Keine Datenmigration durch bloßes Umbenennen.
