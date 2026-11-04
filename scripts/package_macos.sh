@@ -43,8 +43,11 @@ for sammler_size in 16 32 128 256 512; do
 done
 iconutil -c icns "$sammler_icons" -o "$sammler_app/Contents/Resources/SammlerVitrine.icns"
 /usr/libexec/PlistBuddy -c "Add :CFBundleIconFile string SammlerVitrine.icns" "$sammler_app/Contents/Info.plist"
+# Normalize the staging copy before signing; reject invalid nested bundle IDs.
+python3 scripts/macos_bundle.py prepare --app "$sammler_app"
 # Ad-hoc signing permits local Apple-Silicon testing. It is not a distribution identity.
 codesign --force --deep --sign - "$sammler_app"
+python3 scripts/macos_bundle.py inspect --app "$sammler_app"
 hdiutil create -volname "Collection Showcase" -srcfolder "$sammler_stage" -ov -format UDZO "$sammler_dmg"
 shasum -a 256 "$sammler_dmg" > "$sammler_dmg.sha256"
 echo "$sammler_dmg"
