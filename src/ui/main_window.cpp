@@ -311,6 +311,7 @@ MainWindow::MainWindow(StorageController& controller, QString dataDirectory,
     summary.fields.photo.clear();
     if (found == items_.end()) {
       items_.append(summary);
+      search_->clear();
     } else {
       *found = summary;
     }
