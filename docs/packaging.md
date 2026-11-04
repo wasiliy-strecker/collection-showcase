@@ -1,3 +1,8 @@
+# Aktueller Mac-Store-Releaseweg
+
+Für den Nutzerauftrag vom 4. November 2026 gilt `mac-app-store-release.md`.
+Die folgenden älteren Paketwege bleiben Entwicklungsreferenzen.
+
 # Paketierung und spätere Store-Schritte
 
 Aktueller öffentlicher Name: **Collection Showcase**. Alle sechs Oberflächensprachen bleiben

@@ -13,7 +13,12 @@ https://download.qt.io/archive/qt/6.8/6.8.3/submodules/qtbase-everywhere-src-6.8
 Die Dateien im Ordner licenses enthalten die Lizenztexte und Hinweise zu
 mitgelieferten Fremdkomponenten. Zur Veröffentlichung müssen der zu den
 ausgelieferten Bibliotheken gehörende Quellcode und die nötigen Bauhinweise
-verfügbar gemacht werden. Das lokale Testpaket ist noch keine Store-Freigabe.
+verfügbar gemacht werden. Im Mac-Store-Bundle liegen die vollständigen Qt-base-
+und Qt-translations-6.8.3-Quellenarchive unter `Contents/Resources/QtSources`.
+Prüfsummen und Herkunft stehen in `qt-sources.json`, SDK-Inventare unter
+`licenses/qt-sdk-sbom`. `qt-library-replacement.md` und `replace_macos_qt.py`
+beschreiben und unterstützen eine separate lokal signierte Kopie mit ersetzten
+Qt-Bibliotheken. Details zur Auslieferung stehen in `docs/mac-app-store-release.md`.
 
 Die Rechte zum Ändern, Ersetzen und erneuten Einbinden der LGPL-Bibliotheken
 sowie zur Untersuchung solcher Änderungen werden nicht eingeschränkt.

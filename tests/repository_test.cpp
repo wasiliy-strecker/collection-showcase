@@ -110,7 +110,7 @@ private slots:
       QVERIFY(!repository.find(firstId).hasPhoto);
       QCOMPARE(repository.find(secondId).fields.photo, blue);
       repository.remove(secondId);
-      QVERIFY_EXCEPTION_THROWN(repository.find(secondId), StorageError);
+      QVERIFY_THROWS_EXCEPTION(StorageError, repository.find(secondId));
       QCOMPARE(repository.findAll().size(), 1);
     }
   }
@@ -128,7 +128,7 @@ private slots:
     ExternalDatabase reader(databasePath(directory));
     reader.execute(QStringLiteral("BEGIN"));
     reader.execute(QStringLiteral("SELECT * FROM items"));
-    QVERIFY_EXCEPTION_THROWN(repository.update(original.id, draft), StorageError);
+    QVERIFY_THROWS_EXCEPTION(StorageError, repository.update(original.id, draft));
     reader.execute(QStringLiteral("ROLLBACK"));
     QCOMPARE(repository.find(original.id), original);
     repository.update(original.id, draft);
@@ -136,8 +136,8 @@ private slots:
     reader.execute(QStringLiteral("BEGIN EXCLUSIVE"));
     auto removed = draft;
     removed.photo.clear();
-    QVERIFY_EXCEPTION_THROWN(repository.update(original.id, removed), StorageError);
-    QVERIFY_EXCEPTION_THROWN(repository.remove(original.id), StorageError);
+    QVERIFY_THROWS_EXCEPTION(StorageError, repository.update(original.id, removed));
+    QVERIFY_THROWS_EXCEPTION(StorageError, repository.remove(original.id));
     reader.execute(QStringLiteral("ROLLBACK"));
     QCOMPARE(repository.find(original.id).fields, draft);
   }
@@ -149,11 +149,11 @@ private slots:
     ExternalDatabase external(databasePath(directory));
     external.execute(QStringLiteral("UPDATE items SET photo=zeroblob(10485761)"));
     QVERIFY(repository.findAll().first().hasPhoto);
-    QVERIFY_EXCEPTION_THROWN(repository.find(item.id), StorageError);
+    QVERIFY_THROWS_EXCEPTION(StorageError, repository.find(item.id));
     external.execute(QStringLiteral("UPDATE items SET photo=x''"));
-    QVERIFY_EXCEPTION_THROWN(repository.find(item.id), StorageError);
+    QVERIFY_THROWS_EXCEPTION(StorageError, repository.find(item.id));
     external.execute(QStringLiteral("UPDATE items SET photo='wrong type'"));
-    QVERIFY_EXCEPTION_THROWN(repository.find(item.id), StorageError);
+    QVERIFY_THROWS_EXCEPTION(StorageError, repository.find(item.id));
   }
   void foreignApplicationIdRemainsUntouched() {
     QTemporaryDir directory;
@@ -167,7 +167,7 @@ private slots:
     }
     const auto before = readFile(databasePath(directory));
     SqliteItemRepository repository(directory.path());
-    QVERIFY_EXCEPTION_THROWN(repository.initialize(), StorageError);
+    QVERIFY_THROWS_EXCEPTION(StorageError, repository.initialize());
     QCOMPARE(readFile(databasePath(directory)), before);
   }
   void crudAndIndependentDuplicates() {
@@ -225,10 +225,10 @@ private slots:
     ItemService service(repository);
     service.load();
     const auto saved = service.save(0, {QStringLiteral("Unverändert"), {}, {}, {}});
-    QVERIFY_EXCEPTION_THROWN(service.save(saved.id, {QStringLiteral("\u00a0"), {}, {}, {}}),
-                             ValidationError);
-    QVERIFY_EXCEPTION_THROWN(service.save(999, saved.fields), StorageError);
-    QVERIFY_EXCEPTION_THROWN(service.remove(999), StorageError);
+    QVERIFY_THROWS_EXCEPTION(ValidationError,
+                             service.save(saved.id, {QStringLiteral("\u00a0"), {}, {}, {}}));
+    QVERIFY_THROWS_EXCEPTION(StorageError, service.save(999, saved.fields));
+    QVERIFY_THROWS_EXCEPTION(StorageError, service.remove(999));
     QVERIFY(service.load() == ItemList{saved});
   }
   void lockedWriteAndRetry() {
@@ -239,9 +239,9 @@ private slots:
     const auto saved = service.save(0, {QStringLiteral("Original"), {}, {}, {}});
     ExternalDatabase external(databasePath(directory));
     external.execute(QStringLiteral("BEGIN EXCLUSIVE"));
-    QVERIFY_EXCEPTION_THROWN(service.save(saved.id, {QStringLiteral("Entwurf"), {}, {}, {}}),
-                             StorageError);
-    QVERIFY_EXCEPTION_THROWN(service.remove(saved.id), StorageError);
+    QVERIFY_THROWS_EXCEPTION(StorageError,
+                             service.save(saved.id, {QStringLiteral("Entwurf"), {}, {}, {}}));
+    QVERIFY_THROWS_EXCEPTION(StorageError, service.remove(saved.id));
     external.execute(QStringLiteral("ROLLBACK"));
     QVERIFY(service.load() == ItemList{saved});
     QCOMPARE(service.save(saved.id, {QStringLiteral("Entwurf"), {}, {}, {}}).fields.name,
@@ -257,12 +257,12 @@ private slots:
     ExternalDatabase reader(databasePath(directory));
     reader.execute(QStringLiteral("BEGIN"));
     reader.execute(QStringLiteral("SELECT * FROM items"));
-    QVERIFY_EXCEPTION_THROWN(service.save(saved.id, {QStringLiteral("Neu"), QStringLiteral("A"),
-                                                     QStringLiteral("B"), QStringLiteral("C")}),
-                             StorageError);
+    QVERIFY_THROWS_EXCEPTION(StorageError,
+                             service.save(saved.id, {QStringLiteral("Neu"), QStringLiteral("A"),
+                                                     QStringLiteral("B"), QStringLiteral("C")}));
     reader.execute(QStringLiteral("ROLLBACK"));
     QVERIFY(service.load() == ItemList{saved});
-    QVERIFY_EXCEPTION_THROWN(service.save(999, saved.fields), StorageError);
+    QVERIFY_THROWS_EXCEPTION(StorageError, service.save(999, saved.fields));
     QCOMPARE(service.save(saved.id, {QStringLiteral("Erneut"), {}, {}, {}}).id, saved.id);
   }
   void triggerWriteFailurePreservesData() {
@@ -274,8 +274,8 @@ private slots:
     ExternalDatabase external(databasePath(directory));
     external.execute(QStringLiteral("CREATE TRIGGER reject_update BEFORE UPDATE ON items BEGIN "
                                     "SELECT RAISE(ABORT, 'synthetischer Schreibfehler'); END"));
-    QVERIFY_EXCEPTION_THROWN(service.save(saved.id, {QStringLiteral("Neu"), {}, {}, {}}),
-                             StorageError);
+    QVERIFY_THROWS_EXCEPTION(StorageError,
+                             service.save(saved.id, {QStringLiteral("Neu"), {}, {}, {}}));
     QVERIFY(service.load() == ItemList{saved});
     external.execute(QStringLiteral("DROP TRIGGER reject_update"));
     QCOMPARE(service.save(saved.id, {QStringLiteral("Neu"), {}, {}, {}}).id, saved.id);
@@ -290,7 +290,7 @@ private slots:
     }
     const auto before = readFile(databasePath(directory));
     SqliteItemRepository repository(directory.path());
-    QVERIFY_EXCEPTION_THROWN(repository.initialize(), StorageError);
+    QVERIFY_THROWS_EXCEPTION(StorageError, repository.initialize());
     QCOMPARE(readFile(databasePath(directory)), before);
   }
   void corruptDatabaseUnchanged() {
@@ -301,7 +301,7 @@ private slots:
     file.close();
     const auto before = readFile(databasePath(directory));
     SqliteItemRepository repository(directory.path());
-    QVERIFY_EXCEPTION_THROWN(repository.initialize(), StorageError);
+    QVERIFY_THROWS_EXCEPTION(StorageError, repository.initialize());
     QCOMPARE(readFile(databasePath(directory)), before);
   }
   void existingEmptyOrForeignDatabase_data() {
@@ -321,7 +321,7 @@ private slots:
     }
     const auto before = readFile(databasePath(directory));
     SqliteItemRepository repository(directory.path());
-    QVERIFY_EXCEPTION_THROWN(repository.initialize(), StorageError);
+    QVERIFY_THROWS_EXCEPTION(StorageError, repository.initialize());
     QCOMPARE(readFile(databasePath(directory)), before);
   }
   void wrongSchemaVersionOne() {
@@ -333,7 +333,7 @@ private slots:
       database.execute(QStringLiteral("CREATE TABLE items(wrong TEXT)"));
     }
     SqliteItemRepository repository(directory.path());
-    QVERIFY_EXCEPTION_THROWN(repository.initialize(), StorageError);
+    QVERIFY_THROWS_EXCEPTION(StorageError, repository.initialize());
   }
   void wrongTypesInKnownSchema() {
     QTemporaryDir directory;
@@ -346,7 +346,7 @@ private slots:
     }
     const auto before = readFile(databasePath(directory));
     SqliteItemRepository repository(directory.path());
-    QVERIFY_EXCEPTION_THROWN(repository.initialize(), StorageError);
+    QVERIFY_THROWS_EXCEPTION(StorageError, repository.initialize());
     QCOMPARE(readFile(databasePath(directory)), before);
   }
   void lockedStartupCanRetry() {
@@ -359,7 +359,7 @@ private slots:
     ExternalDatabase blocker(databasePath(directory));
     blocker.execute(QStringLiteral("BEGIN EXCLUSIVE"));
     SqliteItemRepository repository(directory.path());
-    QVERIFY_EXCEPTION_THROWN(repository.initialize(), StorageError);
+    QVERIFY_THROWS_EXCEPTION(StorageError, repository.initialize());
     blocker.execute(QStringLiteral("ROLLBACK"));
     repository.initialize();
     QCOMPARE(repository.findAll().first().fields.name, QStringLiteral("Vorhanden"));
@@ -369,7 +369,7 @@ private slots:
     auto first = std::make_unique<SqliteItemRepository>(directory.path());
     first->initialize();
     SqliteItemRepository second(directory.path());
-    QVERIFY_EXCEPTION_THROWN(second.initialize(), StorageError);
+    QVERIFY_THROWS_EXCEPTION(StorageError, second.initialize());
     first.reset();
     second.initialize();
     QVERIFY(second.findAll().isEmpty());
@@ -381,7 +381,7 @@ private slots:
     QVERIFY(file.open(QIODevice::WriteOnly));
     file.close();
     SqliteItemRepository repository(path);
-    QVERIFY_EXCEPTION_THROWN(repository.initialize(), StorageError);
+    QVERIFY_THROWS_EXCEPTION(StorageError, repository.initialize());
   }
   void readOnlyFile() {
 #ifdef Q_OS_WIN
@@ -400,8 +400,8 @@ private slots:
       SqliteItemRepository repository(directory.path());
       ItemService service(repository);
       QVERIFY(service.load() == ItemList{saved});
-      QVERIFY_EXCEPTION_THROWN(service.save(saved.id, {QStringLiteral("Neu"), {}, {}, {}}),
-                               StorageError);
+      QVERIFY_THROWS_EXCEPTION(StorageError,
+                               service.save(saved.id, {QStringLiteral("Neu"), {}, {}, {}}));
       QVERIFY(service.load() == ItemList{saved});
     }
     QVERIFY(QFile::setPermissions(databasePath(directory),

@@ -66,10 +66,12 @@ ohne Konto oder Internet und unabhängig von der ursprünglichen Bilddatei.
 
 ![Collection Showcase mit synthetischem Blechroboter](docs/screenshots/sammlervitrine.png)
 
-Version 0.1.0 ist die zweite kleine C++-App des Hobby-Portfolios und ein
+Version 1.0 ist die zweite kleine C++-App des Hobby-Portfolios und ein
 nachvollziehbares Bewerbungsprojekt. Veröffentlichungsziele sind ausdrücklich
 **zuerst Microsoft Store und später Mac App Store für Mac-Computer**.
-Die App wurde noch nicht veröffentlicht oder bei einem Store eingereicht.
+Auf aktuellen Nutzerauftrag wird zuerst der Mac App Store vorbereitet.
+Der eigene Releaseweg steht in `docs/mac-app-store-release.md`. Die Einreichung
+folgt erst nach der nativen Funktionsabnahme durch den Nutzer.
 
 ## Entwickeln und starten
 

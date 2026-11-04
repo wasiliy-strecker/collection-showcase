@@ -75,10 +75,10 @@ private slots:
   void invalidPhotoAndMetadataAreRejected() {
     auto object = encodeEntry(richDraft());
     object.insert(QStringLiteral("photoBase64"), QStringLiteral("YWJj"));
-    QVERIFY_EXCEPTION_THROWN(decodeEntry(object), std::exception);
+    QVERIFY_THROWS_EXCEPTION(std::exception, decodeEntry(object));
     object = encodeEntry(richDraft());
     object.insert(QStringLiteral("photoBase64"), QStringLiteral("!!"));
-    QVERIFY_EXCEPTION_THROWN(decodeEntry(object), std::exception);
+    QVERIFY_THROWS_EXCEPTION(std::exception, decodeEntry(object));
   }
   void sortingKeepsSelectionAndPhotoDetails_data() {
     QTest::addColumn<QString>("tag");

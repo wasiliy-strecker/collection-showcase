@@ -1,3 +1,9 @@
+# Aktuelle native Mac-Prüfung
+
+Der Releaseweg und die getrennte native Nutzerabnahme stehen in
+`mac-app-store-release.md`. Auf macOS nutzt `scripts/check.sh` bei fehlendem
+clang-tidy den Apple Clang Static Analyzer. Ältere Prüfberichte folgen unten.
+
 # Prüfbericht
 
 ## Mac-Menüs und Systemdialogsprachen, 1. November 2026

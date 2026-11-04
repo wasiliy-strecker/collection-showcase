@@ -117,7 +117,7 @@ private slots:
     for (const auto& invalid : {QStringLiteral("red"), QStringLiteral("#12345"),
                                 QStringLiteral("#1234567"), QStringLiteral("#123456\n")}) {
       draft.color = invalid;
-      QVERIFY_EXCEPTION_THROWN(validateDraft(draft), ValidationError);
+      QVERIFY_THROWS_EXCEPTION(ValidationError, validateDraft(draft));
     }
     const auto transparent = colorSwatch(QStringLiteral("#FF000000"));
     QVERIFY(transparent.pixelColor(2, 2) != transparent.pixelColor(6, 2));
@@ -190,7 +190,7 @@ private slots:
       ExternalDatabase reader(path);
       reader.execute(QStringLiteral("BEGIN"));
       reader.execute(QStringLiteral("SELECT * FROM items"));
-      QVERIFY_EXCEPTION_THROWN(repository.initialize(), StorageError);
+      QVERIFY_THROWS_EXCEPTION(StorageError, repository.initialize());
       QSqlQuery query(reader.database);
       QVERIFY(query.exec(QStringLiteral("PRAGMA user_version")));
       QVERIFY(query.next());
@@ -215,9 +215,9 @@ private slots:
     QCOMPARE(decodeEntry(legacy), draft);
     auto invalid = legacy;
     invalid.insert(QStringLiteral("color"), true);
-    QVERIFY_EXCEPTION_THROWN(decodeEntry(invalid), std::exception);
+    QVERIFY_THROWS_EXCEPTION(std::exception, decodeEntry(invalid));
     invalid.insert(QStringLiteral("color"), QStringLiteral("bad"));
-    QVERIFY_EXCEPTION_THROWN(decodeEntry(invalid), std::exception);
+    QVERIFY_THROWS_EXCEPTION(std::exception, decodeEntry(invalid));
     QTemporaryDir data;
     Repository repository(data.path());
     repository.initialize();
@@ -242,7 +242,7 @@ private slots:
     auto changed = draft;
     changed.color = QStringLiteral("#ABCDEF");
     changed.note = QStringLiteral("Changed");
-    QVERIFY_EXCEPTION_THROWN(repository.update(id, changed), StorageError);
+    QVERIFY_THROWS_EXCEPTION(StorageError, repository.update(id, changed));
     QCOMPARE(read(repository, id), draft);
     external.execute(QStringLiteral("DROP TRIGGER reject_color"));
     repository.update(id, changed);

@@ -120,3 +120,18 @@ Neue IDs und Code-Bezeichner möglichst auf Englisch; `de.appfabrik` bleibt.
 Die bisherige interne Datenkennung `de.appfabrik.sammlervitrine`, vorhandene
 Datenpfade, SQLite-application_id, Datenbankdatei und JSON-Format bleiben aus
 Kompatibilitätsgründen erhalten. Keine Datenmigration durch bloßes Umbenennen.
+
+## Mac-Store-Vorbereitung, 4. November 2026
+
+Auf aktuellen Nutzerauftrag wird jetzt zuerst der Mac App Store vorbereitet.
+App-ID `6830831368`, Store- und installierter Name Collection Showcase,
+Version 1.0, Build 1, Bundle-ID `de.appfabrik.collectionshowcase`.
+Nach technischen Prüfungen die signierte App zum Nutzertest öffnen. Vor der
+Einreichung die Funktionsbestätigung für diese App abwarten; keine Abnahme
+aus früheren Apps übernehmen. Fotos, Farben und JSON-Transfer gehören dazu.
+
+Der eigenständige Releaseweg steht in `docs/mac-app-store-release.md`.
+Private Profile und `*.local.json` ignorieren. Qt-Quellen, Originallizenzen und
+Bibliotheksaustauschhinweise mitliefern. Auf diesem Mac ersetzt Apple Clang
+Static Analyzer das nicht installierte clang-tidy; diese Prüfart benennen.
+Vor Änderungen Sicherungscommit, nach erfolgreichen Prüfungen Abschlusscommit.

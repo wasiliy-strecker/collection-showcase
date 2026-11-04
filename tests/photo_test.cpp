@@ -59,7 +59,7 @@ private slots:
   }
   void invalidContent() {
     QFETCH(QByteArray, bytes);
-    QVERIFY_EXCEPTION_THROWN(decodePhoto(bytes), PhotoError);
+    QVERIFY_THROWS_EXCEPTION(PhotoError, decodePhoto(bytes));
   }
   void dimensionLimits_data() {
     QTest::addColumn<QSize>("size");
@@ -77,7 +77,7 @@ private slots:
     if (valid) {
       QVERIFY(!decodePhoto(bytes).preview.isNull());
     } else {
-      QVERIFY_EXCEPTION_THROWN(decodePhoto(bytes), PhotoError);
+      QVERIFY_THROWS_EXCEPTION(PhotoError, decodePhoto(bytes));
     }
   }
   void boundedStreamDoesNotTrustInitialSize() {
@@ -94,7 +94,7 @@ private slots:
       qint64 writeData(const char*, qint64) override { return -1; }
       qint64 consumed = 0;
     } stream;
-    QVERIFY_EXCEPTION_THROWN(readPhotoBytes(stream), PhotoError);
+    QVERIFY_THROWS_EXCEPTION(PhotoError, readPhotoBytes(stream));
     // QIODevice may prefetch a bounded internal buffer, never the whole source.
     QVERIFY(stream.consumed <= maxPhotoBytes + 100);
     QByteArray exact(maxPhotoBytes, 'x');
@@ -104,13 +104,13 @@ private slots:
   }
   void unreadableAndOversizedFile() {
     QTemporaryDir dir;
-    QVERIFY_EXCEPTION_THROWN(importPhoto(dir.filePath("missing.png")), PhotoError);
-    QVERIFY_EXCEPTION_THROWN(importPhoto(dir.path()), PhotoError);
+    QVERIFY_THROWS_EXCEPTION(PhotoError, importPhoto(dir.filePath("missing.png")));
+    QVERIFY_THROWS_EXCEPTION(PhotoError, importPhoto(dir.path()));
     QFile file(dir.filePath("oversize.png"));
     QVERIFY(file.open(QIODevice::WriteOnly));
     QVERIFY(file.resize(maxPhotoBytes + 1));
     file.close();
-    QVERIFY_EXCEPTION_THROWN(importPhoto(file.fileName()), PhotoError);
+    QVERIFY_THROWS_EXCEPTION(PhotoError, importPhoto(file.fileName()));
   }
   void exifOrientation() {
     auto jpeg = picture("JPEG");
